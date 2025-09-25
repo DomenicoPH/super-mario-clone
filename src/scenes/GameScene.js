@@ -1,5 +1,9 @@
 import Phaser from "phaser";
 
+const speed = 160;
+const jumpForce = -400;
+
+
 class GameScene extends Phaser.Scene {
     constructor(){
         super('GameScene')
@@ -17,19 +21,23 @@ class GameScene extends Phaser.Scene {
         this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
 
         this.anims.create({
-            key: 'walk',
-            frames: this.anims.generateFrameNumbers('mario-small', { start: 0, end: 2 }),
-            frameRate: 8,
-            repeat: -1
-        })
-        this.anims.create({
             key: 'idle',
             frames: [{ key: 'mario-small', frame: 0 }],
             frameRate: 1
         });
+        this.anims.create({
+            key: 'walk',
+            frames: this.anims.generateFrameNumbers('mario-small', { start: 1, end: 2 }),
+            frameRate: 8,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'jump',
+            frames: [{ key: 'mario-small', frame: 5 }],
+            frameRate: 1
+        });
 
         this.player = this.physics.add.sprite(100, 100, 'mario-small');
-        this.player.setScale(2);
         this.player.play('idle');
 
         this.physics.add.collider(this.player, groundLayer);
@@ -37,18 +45,29 @@ class GameScene extends Phaser.Scene {
     }
 
     update(){
-        const speed = 160;
+        const player = this.player;
+        const {up, down, left, right, space} = this.cursors;
 
-        if(this.cursors.left.isDown){
+        if(left.isDown){
             this.player.setVelocityX(-speed);
             this.player.setFlipX(true);
-            this.player.play('walk', true);
-        } else if(this.cursors.right.isDown){
+        } else if(right.isDown){
             this.player.setVelocityX(speed);
             this.player.setFlipX(false);
-            this.player.play('walk', true);
         } else {
             this.player.setVelocityX(0);
+        }
+
+        if(space.isDown && player.body.onFloor()){
+            player.setVelocityY(jumpForce);
+        }
+
+        //Anims
+        if(!player.body.onFloor()){
+            player.play('jump', true);
+        } else if (player.body.velocity.x !== 0){
+            player.play('walk', true);
+        } else {
             this.player.play('idle', true);
         }
     }
