@@ -3,10 +3,11 @@ import PreloadScene from "./scenes/PreloadScene";
 import GameScene from "./scenes/GameScene";
 
 const config = {
-  type: Phaser.AUTO,
-  width: 800,
-  height: 600,
+  type: Phaser.CANVAS,
+  width: 256,
+  height: 240,
   pixelArt: true,
+  zoom: 2,
   physics: {
     default: 'arcade',
     arcade: {
