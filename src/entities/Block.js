@@ -9,6 +9,7 @@ export default class Block {
         this.sprite = scene.physics.add.staticSprite(x, y, `block-${type}`);
         this.sprite.setOrigin(0);
         this.sprite.setSize(16, 16);
+        this.sprite.body.setOffset(8, 8);
 
         if (type === 'question') {
           this.sprite.play('block-question-idle');
