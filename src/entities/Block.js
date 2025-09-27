@@ -28,6 +28,9 @@ export default class Block {
             duration: 100,
             yoyo: true,
             ease: 'Power1',
+            onStart: () => {
+              this.bumpObjectsAbove({ force: -200, tolerance: 3, ignorePlayer: true });
+            },
             onComplete: () => {
                 this.sprite.y = this.originalY;
                 this.isAnimating = false;
@@ -38,30 +41,39 @@ export default class Block {
                     this.used = true;
                     this.releaseContent();
                 }
-                this.bumpObjectsAbove();
             }
         })
     };
 
-    bumpObjectsAbove(){
-      const checkArea = new Phaser.Geom.Rectangle(
-        this.sprite.x,
-        this.sprite.y - 4,
-        this.sprite.width,
-        4
-      );
+    bumpObjectsAbove({ force = -200, tolerance = 3, ignorePlayer = true } = {}){
+      // Bounds del bloque (usa getBounds para ser robusto con cualquier origin)
+      const blockBounds = this.sprite.getBounds();
+      const blockTop = blockBounds.top;
+      const blockLeft = blockBounds.left;
+      const blockRight = blockBounds.right;
 
+      // Recorremos cuerpos del mundo
       this.scene.physics.world.bodies.entries.forEach(body => {
-          const obj = body.gameObject;
-
-          if (!obj || obj === this.sprite) return;
-      
-          // Verificar si el objeto está dentro del área
-          if (Phaser.Geom.Rectangle.Overlaps(checkArea, obj.getBounds())) {
-              if (body.allowGravity && !body.immovable) {
-                  body.setVelocityY(-200);
-              }
-          }
+        const obj = body.gameObject;
+        if (!obj || obj === this.sprite) return;
+        if (ignorePlayer && this.scene.player && obj === this.scene.player.sprite) return;
+        if (!obj.getBounds) return;
+    
+        const objBounds = obj.getBounds();
+    
+        // Comprobamos solapamiento horizontal entre bloque y objeto
+        if (objBounds.right <= blockLeft || objBounds.left >= blockRight) return;
+    
+        // Base real del objeto (independiente del origin)
+        const objBaseY = objBounds.bottom;
+    
+        // Si la base del objeto está a la altura del top del bloque (con una pequeña tolerancia),
+        // lo consideramos "apoyado" y le damos impulso
+        if (Math.abs(objBaseY - blockTop) <= tolerance) {
+            if (body.allowGravity && !body.immovable) {
+                body.setVelocityY(force);
+            }
+        }
       });
     }
 
@@ -129,8 +141,7 @@ export default class Block {
           mushroom.body.allowGravity = true;
           mushroom.setImmovable(false);
           mushroom.setBounce(1, 0);
-          //mushroom.setVelocityX(50);
-          mushroom.setVelocityX(10);
+          mushroom.setVelocityX(50);
         }
       });
 
