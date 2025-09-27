@@ -35,4 +35,14 @@ export default class Block {
         })
         
     }
+
+    handleCollision(player, blockSprite) {
+      if (player.body.touching.up && blockSprite.body.touching.down) {
+        this.bump();
+
+        // - generar un power-up
+        // - cambiar el sprite del bloque a "vacío"
+      }
+    }
+
 }
