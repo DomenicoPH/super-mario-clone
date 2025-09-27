@@ -82,11 +82,28 @@ export default class Block {
       const spawnY = this.sprite.y;
 
       const mushroom = this.scene.physics.add.sprite(spawnX, spawnY, 'mushroom');
-      mushroom.setVelocityX(50);
-      mushroom.setBounce(1, 0);
       mushroom.setCollideWorldBounds(true);
+      mushroom.setImmovable(true);
+      mushroom.body.allowGravity = false;
 
+      this.scene.tweens.add({
+        targets: mushroom,
+        y: spawnY - mushroom.height,
+        duration: 400,
+        ease: 'Power1',
+        onComplete: () => {
+          mushroom.body.allowGravity = true;
+          mushroom.setImmovable(false);
+          mushroom.setBounce(1, 0);
+          mushroom.setVelocityX(50);
+        }
+      });
+
+      //colisiones
       this.scene.physics.add.collider(mushroom, this.scene.groundLayer);
+      this.scene.blocks.forEach( block => {
+        this.scene.physics.add.collider(mushroom, block.sprite);
+      })
 
       this.scene.physics.add.overlap(this.scene.player.sprite, mushroom, () => {
         mushroom.destroy();

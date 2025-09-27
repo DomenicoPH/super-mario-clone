@@ -19,7 +19,7 @@ class GameScene extends Phaser.Scene {
         this.setupCamera();   
 
         //debug..
-        createGridOverlay(this, this.map);
+        //createGridOverlay(this, this.map);
     }
 
     update(){
