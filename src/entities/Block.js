@@ -38,9 +38,32 @@ export default class Block {
                     this.used = true;
                     this.releaseContent();
                 }
+                this.bumpObjectsAbove();
             }
         })
     };
+
+    bumpObjectsAbove(){
+      const checkArea = new Phaser.Geom.Rectangle(
+        this.sprite.x,
+        this.sprite.y - 4,
+        this.sprite.width,
+        4
+      );
+
+      this.scene.physics.world.bodies.entries.forEach(body => {
+          const obj = body.gameObject;
+
+          if (!obj || obj === this.sprite) return;
+      
+          // Verificar si el objeto está dentro del área
+          if (Phaser.Geom.Rectangle.Overlaps(checkArea, obj.getBounds())) {
+              if (body.allowGravity && !body.immovable) {
+                  body.setVelocityY(-200);
+              }
+          }
+      });
+    }
 
     releaseContent(){
       if(!this.content) return;
@@ -106,7 +129,8 @@ export default class Block {
           mushroom.body.allowGravity = true;
           mushroom.setImmovable(false);
           mushroom.setBounce(1, 0);
-          mushroom.setVelocityX(50);
+          //mushroom.setVelocityX(50);
+          mushroom.setVelocityX(10);
         }
       });
 
