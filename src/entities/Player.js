@@ -1,11 +1,19 @@
-const speed = 160;
+import Phaser from "phaser";
+
+const maxSpeed = 160;
+const acceleration = 200;
+const drag = 800;
 const jumpForce = -400;
 
 export default class Player {
     constructor(scene, x, y){
         this.scene = scene;
-        this.sprite = scene.physics.add.sprite(x, y, 'mario-small');
+        this.sprite = scene.physics.add.sprite(x, y, 'mario-small').setSize(8, 16);
         this.sprite.setCollideWorldBounds(true);
+
+        this.body.setMaxVelocity(maxSpeed, 500);
+        this.body.setDragX(drag);
+
         this.createAnimations();
         this.cursors = scene.input.keyboard.createCursorKeys();
     }
@@ -17,14 +25,15 @@ export default class Player {
         anims.create({ key: 'jump', frames: [{ key: 'mario-small', frame: 5}], frameRate: 1});
     }
 
+    get body(){ 
+        return this.sprite.body 
+    };
+
     update(){
         this.playerControl();
         this.playerAnims();        
     }
 
-    get body(){ 
-        return this.sprite.body 
-    };
     
     /* --Custom methods-- */
 
@@ -33,16 +42,16 @@ export default class Player {
         const {left, right, space} = this.cursors;
 
         if(left.isDown){
-            this.sprite.setVelocityX(-speed);
+            this.sprite.setAccelerationX(-acceleration);
             this.sprite.setFlipX(true);
         } else if(right.isDown){
-            this.sprite.setVelocityX(speed);
+            this.sprite.setAccelerationX(acceleration);
             this.sprite.setFlipX(false);
         } else {
-            this.sprite.setVelocityX(0);
+            this.sprite.setAccelerationX(0);
         }
 
-        if(space.isDown && this.body.onFloor()){
+        if(Phaser.Input.Keyboard.JustDown(space) && this.body.onFloor()){
             this.sprite.setVelocityY(jumpForce);
         }
     }

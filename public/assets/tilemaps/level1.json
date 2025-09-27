@@ -11,9 +11,9 @@
  "layers":[
         {
          "id":2,
-         "image":"rough\/stage_1-1.png",
+         "image":"rough\/NES - Super Mario Bros. - Stages - World 1-1.png",
          "name":"ref",
-         "opacity":0.21,
+         "opacity":0.22,
          "type":"imagelayer",
          "visible":true,
          "x":0,

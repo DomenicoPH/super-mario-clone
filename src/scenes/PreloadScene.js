@@ -14,6 +14,7 @@ class PreloadScene extends Phaser.Scene {
 
         this.load.image('block-brick', '/assets/sprites/brick-block-sprite.png');
         this.load.spritesheet('block-question', '/assets/sprites/question-block-spritesheet.png', { frameWidth:16, frameHeight:16 });
+        this.load.image('block-question-empty', '/assets/sprites/question-block-empty.png');
     }
 
     create(){

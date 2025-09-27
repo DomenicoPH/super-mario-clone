@@ -5,11 +5,12 @@ export default class Block {
         this.content = content;
         this.originalY = y;
         this.isAnimating = false;
+        this.used = false;
 
         this.sprite = scene.physics.add.staticSprite(x, y, `block-${type}`);
-        this.sprite.setOrigin(0);
+        this.sprite.setOrigin(-1);
         this.sprite.setSize(16, 16);
-        this.sprite.body.setOffset(8, 8);
+        this.sprite.body.setOffset(24, 24);
 
         if (type === 'question') {
           this.sprite.play('block-question-idle');
@@ -18,7 +19,7 @@ export default class Block {
     }
 
     bump(){
-        if(this.isAnimating) return;
+        if(this.isAnimating || this.used) return;
         
         this.isAnimating = true;
 
@@ -31,6 +32,12 @@ export default class Block {
             onComplete: () => {
                 this.sprite.y = this.originalY;
                 this.isAnimating = false;
+
+                if(this.type === 'question'){
+                    this.sprite.setTexture('block-question-empty');
+                    this.sprite.anims.stop();
+                    this.used = true;
+                }
             }
         })
         
