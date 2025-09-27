@@ -11,9 +11,9 @@
  "layers":[
         {
          "id":2,
-         "image":"rough\/NES - Super Mario Bros. - Stages - World 1-1.png",
+         "image":"..\/rough\/NES - Super Mario Bros. - Stages - World 1-1.png",
          "name":"ref",
-         "opacity":0.22,
+         "opacity":0.43,
          "type":"imagelayer",
          "visible":true,
          "x":0,
@@ -154,6 +154,11 @@
                  "name":"",
                  "properties":[
                         {
+                         "name":"content",
+                         "type":"string",
+                         "value":"mushroom"
+                        }, 
+                        {
                          "name":"type",
                          "type":"string",
                          "value":"question"
@@ -170,6 +175,11 @@
                  "id":13,
                  "name":"",
                  "properties":[
+                        {
+                         "name":"content",
+                         "type":"string",
+                         "value":"coin"
+                        }, 
                         {
                          "name":"type",
                          "type":"string",
@@ -188,6 +198,11 @@
                  "name":"",
                  "properties":[
                         {
+                         "name":"content",
+                         "type":"string",
+                         "value":"coin"
+                        }, 
+                        {
                          "name":"type",
                          "type":"string",
                          "value":"question"
@@ -204,6 +219,11 @@
                  "id":15,
                  "name":"",
                  "properties":[
+                        {
+                         "name":"content",
+                         "type":"string",
+                         "value":"coin"
+                        }, 
                         {
                          "name":"type",
                          "type":"string",
@@ -222,6 +242,11 @@
                  "name":"",
                  "properties":[
                         {
+                         "name":"content",
+                         "type":"string",
+                         "value":"coin"
+                        }, 
+                        {
                          "name":"type",
                          "type":"string",
                          "value":"question"
@@ -238,6 +263,11 @@
                  "id":18,
                  "name":"",
                  "properties":[
+                        {
+                         "name":"content",
+                         "type":"string",
+                         "value":"mushroom"
+                        }, 
                         {
                          "name":"type",
                          "type":"string",
@@ -256,6 +286,11 @@
                  "name":"",
                  "properties":[
                         {
+                         "name":"content",
+                         "type":"string",
+                         "value":"coin"
+                        }, 
+                        {
                          "name":"type",
                          "type":"string",
                          "value":"question"
@@ -273,6 +308,11 @@
                  "name":"",
                  "properties":[
                         {
+                         "name":"content",
+                         "type":"string",
+                         "value":"coin"
+                        }, 
+                        {
                          "name":"type",
                          "type":"string",
                          "value":"question"
@@ -289,6 +329,11 @@
                  "id":21,
                  "name":"",
                  "properties":[
+                        {
+                         "name":"content",
+                         "type":"string",
+                         "value":"coin"
+                        }, 
                         {
                          "name":"type",
                          "type":"string",

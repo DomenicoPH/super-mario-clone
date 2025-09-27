@@ -4,6 +4,8 @@ Vite & Phaser
 ## Enlaces  
 [Spriters: NES Super Mario Bros (sprites)](https://www.spriters-resource.com/nes/supermariobros/)
 
+---
+
 ## Estructura de mapa en capas
 ✅ Capa 1: Ground
 - Contenido: bloques sólidos (suelo, plataformas, ladrillos, tubos).
@@ -24,7 +26,40 @@ Vite & Phaser
 ✅ Capa 5: Ref (solo para ti)
 - Contenido: imagen de referencia del mapa original.
 - Uso en Phaser: no se exporta ni se usa en el juego.
-- Consejo: bloquea esta capa para evitar moverla accidentalmente.
+- Consejo: bloquea esta capa para evitar moverla accidentalmente. 
+
+---
+
+## EASE en animaciones
+### Lineales
+
+"Linear" → constante, sin aceleración.
+
+### Suaves
+
+"Sine.easeIn", "Sine.easeOut", "Sine.easeInOut" → transiciones suaves (tipo seno).
+
+"Quad.easeIn", "Quad.easeOut", "Quad.easeInOut" → aceleración cuadrática.
+
+"Cubic.*", "Quart.*", "Quint.*" → lo mismo pero con curvas más pronunciadas.
+
+### Exponenciales y Potentes
+
+"Expo.easeIn", "Expo.easeOut", "Expo.easeInOut" → cambios muy rápidos o muy lentos.
+
+"Power0", "Power1", "Power2", "Power3", "Power4" → alias cortos para distintos grados de aceleración.
+
+### Elásticas y Rebotes
+
+"Elastic.easeIn", "Elastic.easeOut", "Elastic.easeInOut" → efecto resorte (rebota varias veces).
+
+"Bounce.easeIn", "Bounce.easeOut", "Bounce.easeInOut" → rebote al final o inicio.
+
+### Retroceso
+
+"Back.easeIn", "Back.easeOut", "Back.easeInOut" → empieza retrocediendo un poco y luego avanza.
+
+---
 
 ## FIXES (arreglos pendientes)
 - Las monedas deben aparecer detras del bloque, no por delante.

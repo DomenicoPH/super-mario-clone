@@ -10,12 +10,12 @@ export default class Block {
         this.sprite = scene.physics.add.staticSprite(x, y, `block-${type}`);
         this.sprite.setOrigin(0);
         this.sprite.refreshBody();
+        this.sprite.setDepth(10);
 
         if (type === 'question') {
           this.sprite.play('block-question-idle');
         }
-
-    }
+    };
 
     bump(){
         if(this.isAnimating || this.used) return;
@@ -40,8 +40,7 @@ export default class Block {
                 }
             }
         })
-        
-    }
+    };
 
     releaseContent(){
       if(!this.content) return;
@@ -64,11 +63,22 @@ export default class Block {
       const coin = this.scene.add.sprite(spawnX, spawnY, 'coin-spin');
       coin.play('coin-spin');
 
+      // tween 1: sube
       this.scene.tweens.add({
         targets: coin,
-        y: coin.y - 32,
-        duration: 300,
-        onComplete: () => coin.destroy()
+        y: spawnY - 50,
+        duration: 200,
+        ease: 'Sine.easeOut',
+        onComplete: () => {
+          // tween 2: baja un poco y se destruye
+          this.scene.tweens.add({
+            targets: coin,
+            y: spawnY - 35,
+            duration: 100,
+            ease: 'Sine.easeIn',
+            onComplete: () => coin.destroy()
+          });
+        }
       });
 
       /* update del score, pendiente...
@@ -82,6 +92,7 @@ export default class Block {
       const spawnY = this.sprite.y;
 
       const mushroom = this.scene.physics.add.sprite(spawnX, spawnY, 'mushroom');
+      mushroom.setOrigin(0.5, 0);
       mushroom.setCollideWorldBounds(true);
       mushroom.setImmovable(true);
       mushroom.body.allowGravity = false;
@@ -89,8 +100,8 @@ export default class Block {
       this.scene.tweens.add({
         targets: mushroom,
         y: spawnY - mushroom.height,
-        duration: 400,
-        ease: 'Power1',
+        duration: 1000,
+        ease: 'Linear',
         onComplete: () => {
           mushroom.body.allowGravity = true;
           mushroom.setImmovable(false);
@@ -119,6 +130,6 @@ export default class Block {
         // - generar un power-up
         // - cambiar el sprite del bloque a "vacío"
       }
-    }
+    };
 
 }
