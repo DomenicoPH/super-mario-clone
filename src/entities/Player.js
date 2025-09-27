@@ -1,8 +1,8 @@
 import Phaser from "phaser";
 
 const maxSpeed = 160;
-const acceleration = 200;
-const drag = 800;
+const acceleration = 300;
+const drag = 200;
 const jumpForce = -400;
 
 export default class Player {
@@ -54,6 +54,12 @@ export default class Player {
 
         if(Phaser.Input.Keyboard.JustDown(space) && this.body.onFloor()){
             this.sprite.setVelocityY(jumpForce);
+        }
+
+        if (this.body.onFloor()) {
+          this.body.setDragX(drag);
+        } else {
+          this.body.setDragX(0);
         }
     }
 
