@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import Player from "../entities/Player";
 import Block from "../entities/Block";
+import { createGridOverlay } from "../debug/gridOverlay";
 
 class GameScene extends Phaser.Scene {
     constructor(){
@@ -16,6 +17,9 @@ class GameScene extends Phaser.Scene {
 
         this.setupWorldBounds();
         this.setupCamera();   
+
+        //debug..
+        createGridOverlay(this, this.map);
     }
 
     update(){
@@ -43,11 +47,18 @@ class GameScene extends Phaser.Scene {
 
     createAnimations(){
         this.anims.create({
-          key: 'block-question-idle',
-          frames: this.anims.generateFrameNumbers('block-question', { start: 0, end: 2 }),
-          frameRate: 4,
-          repeat: -1
+            key: 'block-question-idle',
+            frames: this.anims.generateFrameNumbers('block-question', { start: 0, end: 2 }),
+            frameRate: 4,
+            repeat: -1
         });
+
+        this.anims.create({
+            key: 'coin-spin',
+            frames: this.anims.generateFrameNumbers('coin', {start: 0, end: 3}),
+            frameRate: 10,
+            repeat: -1,
+        })
     };
 
     createBlocks(){
@@ -60,7 +71,7 @@ class GameScene extends Phaser.Scene {
             const type = props.type || obj.type || 'question';
             const content = props.content || null;
 
-            const block = new Block(this, obj.x, obj.y - obj.height, type, content);
+            const block = new Block(this, obj.x, obj.y, type, content);
             this.blocks.push(block);
         })
     };
