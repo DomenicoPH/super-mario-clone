@@ -25,3 +25,8 @@ Vite & Phaser
 - Contenido: imagen de referencia del mapa original.
 - Uso en Phaser: no se exporta ni se usa en el juego.
 - Consejo: bloquea esta capa para evitar moverla accidentalmente.
+
+## FIXES (arreglos pendientes)
+- Las monedas deben aparecer detras del bloque, no por delante.
+- El hongo debe subir hasta la superficie del bloque y no dar un saltito.
+- El hongo debe ser suceptible de ser empujado hacia arriba si el bloque (brick) por el que se desplaza debajo es golpeado por el jugador por abajo.
