@@ -13,6 +13,8 @@ class GameScene extends Phaser.Scene {
         this.createAnimations();
         this.createBlocks();
         this.createPlayer();
+
+        this.setupWorldBounds();
         this.setupCamera();   
     }
 
@@ -74,8 +76,12 @@ class GameScene extends Phaser.Scene {
         });
     };
 
+    setupWorldBounds(){
+        const worldBounds = [true, true, false, true]
+        this.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels, ...worldBounds);
+    }
+
     setupCamera(){
-        this.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
         this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
         this.cameras.main.startFollow(this.player.sprite);
         this.cameras.main.setFollowOffset(0, 80);

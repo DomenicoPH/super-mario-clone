@@ -9,6 +9,7 @@ export default class Player {
     constructor(scene, x, y){
         this.scene = scene;
         this.sprite = scene.physics.add.sprite(x, y, 'mario-small').setSize(8, 16);
+
         this.sprite.setCollideWorldBounds(true);
 
         this.body.setMaxVelocity(maxSpeed, 500);
