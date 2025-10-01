@@ -80,11 +80,14 @@ class GameScene extends Phaser.Scene {
         this.player = new Player(this, 48, 200);
         this.physics.add.collider(this.player, this.groundLayer);
 
+        this.blocksGroup = this.physics.add.staticGroup();
         this.blocks.forEach(block => {
-            this.physics.add.collider(this.player.sprite, block.sprite, (player, blockSprite) => {
-              block.handleCollision(player, blockSprite);
-            });
+            block.sprite.blockRef = block;
+            this.blocksGroup.add(block.sprite);
         });
+        this.physics.add.collider(this.player.sprite, this.blocksGroup, (player, blockSprite) => {
+            blockSprite.blockRef.handleCollision(player, blockSprite);
+    }   );
     };
 
     setupWorldBounds(){
