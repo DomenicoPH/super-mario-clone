@@ -1,3 +1,5 @@
+import AnimationHelper from "../helpers/AnimationHelper";
+
 export default class Block {
     constructor(scene, x, y, type = 'question', content = null){
         this.scene = scene;
@@ -19,30 +21,26 @@ export default class Block {
 
     bump(){
         if(this.isAnimating || this.used) return;
-        
         this.isAnimating = true;
 
-        this.scene.tweens.add({
-            targets: this.sprite,
-            y: this.originalY - 8,
-            duration: 100,
-            yoyo: true,
-            ease: 'Power1',
-            onStart: () => {
-              this.bumpObjectsAbove({ force: -300, tolerance: 3, ignorePlayer: true });
-            },
-            onComplete: () => {
-                this.sprite.y = this.originalY;
-                this.isAnimating = false;
-
-                if(this.type === 'question'){
-                    this.sprite.setTexture('block-question-empty');
-                    this.sprite.anims.stop();
-                    this.used = true;
-                    this.releaseContent();
-                }
+        AnimationHelper.bump(this.scene, this.sprite, {
+          offsetY: 8,
+          duration: 100,
+          onStart: () => {
+            this.bumpObjectsAbove({ force: -300, tolerance: 3, ignorePlayer: true });
+          },
+          onComplete: () => {
+            this.sprite.y = this.originalY;
+            this.isAnimating = false;
+            
+            if(this.type === 'question'){
+              this.sprite.setTexture('block-question-empty');
+              this.sprite.anims.stop();
+              this.used = true;
+              this.releaseContent();
             }
-        })
+          }
+        });
     };
 
     bumpObjectsAbove({ force = -200, tolerance = 3, ignorePlayer = true } = {}){
@@ -91,23 +89,7 @@ export default class Block {
       const coin = this.scene.add.sprite(spawnX, spawnY, 'coin-spin');
       coin.play('coin-spin');
 
-      // tween 1: sube
-      this.scene.tweens.add({
-        targets: coin,
-        y: spawnY - 50,
-        duration: 200,
-        ease: 'Sine.easeOut',
-        onComplete: () => {
-          // tween 2: baja un poco y se destruye
-          this.scene.tweens.add({
-            targets: coin,
-            y: spawnY - 35,
-            duration: 100,
-            ease: 'Sine.easeIn',
-            onComplete: () => coin.destroy()
-          });
-        }
-      });
+      AnimationHelper.coinPop(this.scene, coin);
 
       /* update del score, pendiente...
       this.scene.registry.values.score += 100;
@@ -127,11 +109,7 @@ export default class Block {
       mushroom.setImmovable(true);
       mushroom.body.allowGravity = false;
 
-      this.scene.tweens.add({
-        targets: mushroom,
-        y: spawnY - mushroom.height,
-        duration: 1000,
-        ease: 'Linear',
+      AnimationHelper.mushroomRise(this.scene, mushroom, {
         onComplete: () => {
           mushroom.body.allowGravity = true;
           mushroom.setImmovable(false);
