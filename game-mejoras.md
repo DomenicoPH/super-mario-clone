@@ -4,7 +4,7 @@
 
 2. OK - Evitar iterar world.bodies.entries en bumpObjectsAbove → usar grupos filtrados.
 
-3. Centralizar spawns de ítems en un ItemManager.
+3. OK - Centralizar spawns de ítems en un ItemManager.
 
 4. Revisar spawn de hongo → activar colisiones durante la animación.
 

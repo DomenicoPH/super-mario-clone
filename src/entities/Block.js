@@ -128,6 +128,7 @@ export default class Block {
         mushroom.destroy();
         console.log('power-up')
         // Logica para hacer crecer a Mario
+        this.scene.player.grow();
       })
     };
 

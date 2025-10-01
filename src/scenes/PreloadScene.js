@@ -11,6 +11,7 @@ class PreloadScene extends Phaser.Scene {
         this.load.tilemapTiledJSON('level1', '/assets/tilemaps/level1.json');
 
         this.load.spritesheet('mario-small', '/assets/sprites/mario-small.png', { frameWidth: 16, frameHeight: 16 });
+        this.load.spritesheet('mario-big', '/assets/sprites/mario-big.png', { frameWidth: 16, frameHeight: 32 });
 
         this.load.image('block-brick', '/assets/sprites/brick-block-sprite.png');
         this.load.spritesheet('block-question', '/assets/sprites/question-block-spritesheet.png', { frameWidth:16, frameHeight:16 });
