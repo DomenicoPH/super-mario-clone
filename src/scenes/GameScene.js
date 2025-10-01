@@ -14,10 +14,12 @@ class GameScene extends Phaser.Scene {
         this.createAnimations();
         this.createBlocks();
         this.createPlayer();
-
+        
         this.setupWorldBounds();
         this.setupCamera();   
-
+        
+        this.bumpables = this.physics.add.group();
+        
         //debug..
         //createGridOverlay(this, this.map);
     }

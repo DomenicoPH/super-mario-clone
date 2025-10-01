@@ -29,7 +29,7 @@ export default class Block {
             yoyo: true,
             ease: 'Power1',
             onStart: () => {
-              this.bumpObjectsAbove({ force: -200, tolerance: 3, ignorePlayer: true });
+              this.bumpObjectsAbove({ force: -300, tolerance: 3, ignorePlayer: true });
             },
             onComplete: () => {
                 this.sprite.y = this.originalY;
@@ -53,28 +53,21 @@ export default class Block {
       const blockRight = blockBounds.right;
 
       // Recorremos cuerpos del mundo
-      this.scene.physics.world.bodies.entries.forEach(body => {
-        const obj = body.gameObject;
-        if (!obj || obj === this.sprite) return;
+      this.scene.bumpables.getChildren().forEach(obj => {
+        if (!obj.body || !obj.getBounds) return;
         if (ignorePlayer && this.scene.player && obj === this.scene.player.sprite) return;
-        if (!obj.getBounds) return;
-    
+            
         const objBounds = obj.getBounds();
-    
-        // Comprobamos solapamiento horizontal entre bloque y objeto
         if (objBounds.right <= blockLeft || objBounds.left >= blockRight) return;
-    
-        // Base real del objeto (independiente del origin)
+            
         const objBaseY = objBounds.bottom;
-    
-        // Si la base del objeto está a la altura del top del bloque (con una pequeña tolerancia),
-        // lo consideramos "apoyado" y le damos impulso
         if (Math.abs(objBaseY - blockTop) <= tolerance) {
-            if (body.allowGravity && !body.immovable) {
-                body.setVelocityY(force);
-            }
+          if (obj.body.allowGravity && !obj.body.immovable) {
+            obj.body.setVelocityY(force);
+          }
         }
       });
+
     }
 
     releaseContent(){
@@ -127,6 +120,8 @@ export default class Block {
       const spawnY = this.sprite.y;
 
       const mushroom = this.scene.physics.add.sprite(spawnX, spawnY, 'mushroom');
+      this.scene.bumpables.add(mushroom);
+
       mushroom.setOrigin(0.5, 0);
       mushroom.setCollideWorldBounds(true);
       mushroom.setImmovable(true);
