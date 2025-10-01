@@ -9,6 +9,7 @@ export default class Player {
     constructor(scene, x, y){
         this.scene = scene;
         this.size = 'small';
+        this.isTransforming = false;
 
         this.sprite = scene.physics.add.sprite(x, y, 'mario-small').setSize(8, 16);
 
@@ -33,6 +34,40 @@ export default class Player {
         anims.create({ key: 'big-idle', frames: [{ key: 'mario-big', frame: 0}], frameRate: 1});
         anims.create({ key: 'big-walk', frames: anims.generateFrameNumbers('mario-big', {start: 1, end: 2}), frameRate: 8, repeat: -1 });
         anims.create({ key: 'big-jump', frames: [{ key: 'mario-big', frame: 5}], frameRate: 1});
+
+        // GROW animation
+        anims.create({
+            key: 'transform-grow',
+            frames: [
+                { key: 'mario-trans', frame: 0 }, // small
+                { key: 'mario-trans', frame: 1 }, // medium
+                { key: 'mario-trans', frame: 2 }, // big
+                { key: 'mario-trans', frame: 0 }, // back to small
+                { key: 'mario-trans', frame: 2 }, // big
+                { key: 'mario-trans', frame: 0 }, // small
+                { key: 'mario-trans', frame: 2 }, // big
+                { key: 'mario-trans', frame: 2 }  // final big
+            ],
+            frameRate: 12,
+            repeat: 0
+        });
+
+        // SHRINK animation
+        anims.create({
+            key: 'transform-shrink',
+            frames: [
+                { key: 'mario-trans', frame: 2 }, // big
+                { key: 'mario-trans', frame: 1 }, // medium
+                { key: 'mario-trans', frame: 0 }, // small
+                { key: 'mario-trans', frame: 2 }, // back to big
+                { key: 'mario-trans', frame: 0 }, // small
+                { key: 'mario-trans', frame: 2 }, // big
+                { key: 'mario-trans', frame: 0 }, // small
+                { key: 'mario-trans', frame: 0 }  // final small
+            ],
+            frameRate: 12,
+            repeat: 0
+        })
     }
 
     get body(){ 
@@ -74,8 +109,9 @@ export default class Player {
 
     //Anims
     playerAnims(){
-        const prefix = this.size;
+        if(this.isTransforming) return;
 
+        const prefix = this.size;
         if(!this.body.onFloor()){
             this.sprite.play(`${prefix}-jump`, true);
         } else if (this.body.velocity.x !== 0){
@@ -85,21 +121,39 @@ export default class Player {
         }
     }
 
-    grow(){
-        if(this.size === 'small'){
-            this.size = 'big';
-            this.sprite.setTexture('mario-big');
-            this.sprite.setSize(12, 32);
-            this.sprite.setOffset(2, 0);
-        }
+    // setBodySize: Ajusta el tamaño y offset del cuerpo físico manteniendo los pies del sprite en la misma posición (no se hunde ni flota).
+    setBodySize(width, height, offsetX, offsetY = 0) {
+        const oldBottom = this.sprite.body.bottom;
+        this.sprite.setSize(width, height).setOffset(offsetX, offsetY);
+        this.sprite.y = oldBottom - this.sprite.body.halfHeight;
     }
 
-    shrink(){
-        if(this.size === 'big'){
-            this.size = 'small';
-            this.sprite.setTexture('mario-small');
-            this.sprite.setSize(8, 16);
-            this.sprite.setOffset(4, 0);
-        }
+    grow() {
+        if (this.size !== 'small' || this.isTransforming) return;
+    
+        this.isTransforming = true;
+        this.setBodySize(12, 32, 2);   // hitbox grande
+        this.sprite.play('transform-grow');
+    
+        this.sprite.once(Phaser.Animations.Events.ANIMATION_COMPLETE, () => {
+          this.size = 'big';
+          this.sprite.setTexture('mario-big');
+          this.isTransforming = false;
+        });
     }
+
+    shrink() {
+        if (this.size !== 'big' || this.isTransforming) return;
+        
+        this.isTransforming = true;
+        this.setBodySize(8, 16, 4);    // hitbox chico
+        this.sprite.play('transform-shrink');
+        
+        this.sprite.once(Phaser.Animations.Events.ANIMATION_COMPLETE, () => {
+          this.size = 'small';
+          this.sprite.setTexture('mario-small');
+          this.isTransforming = false;
+        });
+    }
+
 };
