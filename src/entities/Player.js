@@ -75,7 +75,7 @@ export default class Player {
     };
 
     update(){
-        this.playerControl();
+        if(!this.isTransforming) this.playerControl()
         this.playerAnims();        
     }
 
@@ -132,6 +132,12 @@ export default class Player {
         if (this.size !== 'small' || this.isTransforming) return;
     
         this.isTransforming = true;
+
+        this.sprite.setVelocity(0, 0);   // detener velocidad en ambos ejes
+        this.sprite.setAcceleration(0, 0); // quitar aceleración
+        this.sprite.body.allowGravity = false; // opcional: congelar en el aire
+        this.sprite.anims.stop(); // detener cualquier animación previa
+
         this.setBodySize(12, 32, 2);   // hitbox grande
         this.sprite.play('transform-grow');
     
@@ -139,6 +145,7 @@ export default class Player {
           this.size = 'big';
           this.sprite.setTexture('mario-big');
           this.isTransforming = false;
+          this.sprite.body.allowGravity = true;
         });
     }
 
