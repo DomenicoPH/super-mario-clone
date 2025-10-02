@@ -26,7 +26,12 @@ export default class Enemy {
 
         //animación de aplastamiento
         this.sprite.setVelocity(0, 0);
+        this.sprite.setFrame(2);
         this.sprite.disableBody(true, false);
+
+        this.sprite.body.setSize(this.sprite.body.width, this.sprite.body.height / 2);
+        this.sprite.body.position += this.sprite.body.height / 2;
+        
         this.scene.time.delayedCall(500, () => this.sprite.destroy());
     }
 
@@ -39,10 +44,10 @@ export default class Enemy {
             } else {
                 // Lógica de game over temporal
             console.log('game over');
-            
+
             // Pausar la física (enemigos, jugador, etc.)
             this.scene.physics.pause();
-            
+
             // Mostrar texto en el centro
             const { width, height } = this.scene.sys.game.canvas;
             this.scene.add.text(width / 2, height / 2, 'GAME OVER', {
@@ -51,7 +56,7 @@ export default class Enemy {
                 fontFamily: 'Arial',
                 fontStyle: 'bold'
             }).setOrigin(0.5);
-        
+
             // (Opcional) reiniciar después de 2 segundos
             this.scene.time.delayedCall(2000, () => {
                 this.scene.scene.start('GameScene');

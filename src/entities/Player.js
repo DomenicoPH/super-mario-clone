@@ -11,7 +11,7 @@ export default class Player {
         this.size = 'small';
         this.isTransforming = false;
 
-        this.sprite = scene.physics.add.sprite(x, y, 'mario-small').setSize(8, 16);
+        this.sprite = scene.physics.add.sprite(x, y, 'mario-small').setSize(10, 16);
 
         this.sprite.setCollideWorldBounds(true);
 
@@ -157,7 +157,7 @@ export default class Player {
         this.sprite.body.allowGravity = false; // opcional: congelar en el aire
         this.sprite.anims.stop(); // detener cualquier animación previa
 
-        this.setBodySize(12, 32, 2);   // hitbox grande
+        this.setBodySize(15, 32, true);   // hitbox grande
         this.sprite.play('transform-grow');
     
         this.sprite.once(Phaser.Animations.Events.ANIMATION_COMPLETE, () => {
@@ -172,7 +172,7 @@ export default class Player {
         if (this.size !== 'big' || this.isTransforming) return;
         
         this.isTransforming = true;
-        this.setBodySize(8, 16, 4);    // hitbox chico
+        this.setBodySize(10, 16, true);    // hitbox chico
         this.sprite.play('transform-shrink');
         
         this.sprite.once(Phaser.Animations.Events.ANIMATION_COMPLETE, () => {
@@ -184,16 +184,16 @@ export default class Player {
 
     powerUpFire() {
         if (this.size !== 'big' || this.isTransforming) return;
-        
+
         this.isTransforming = true;
-        
+
         this.sprite.setVelocity(0, 0);
         this.sprite.setAcceleration(0, 0);
         this.sprite.body.allowGravity = false;
         this.sprite.anims.stop();
-        
+
         this.sprite.play('transform-fire');
-        
+
         this.sprite.once(Phaser.Animations.Events.ANIMATION_COMPLETE, () => {
             this.size = 'fire';
             this.sprite.setTexture('mario-fire');
