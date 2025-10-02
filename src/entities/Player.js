@@ -101,7 +101,7 @@ export default class Player {
             this.sprite.body.height
         );
         (this.size === 'big' || this.size === 'fire') && this.sprite.setSize(
-            this.body.onFloor() ? 14 : 10,
+            this.body.onFloor() ? 14 : 11,
             this.sprite.body.height
         ) 
     }
