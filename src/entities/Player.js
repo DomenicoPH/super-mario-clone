@@ -95,7 +95,15 @@ export default class Player {
 
     update(){
         if(!this.isTransforming) this.playerControl()
-        this.playerAnims();        
+        this.playerAnims();
+        this.size === 'small' && this.sprite.setSize(
+            this.body.onFloor() ? 10 : 8, 
+            this.sprite.body.height
+        );
+        (this.size === 'big' || this.size === 'fire') && this.sprite.setSize(
+            this.body.onFloor() ? 14 : 10,
+            this.sprite.body.height
+        ) 
     }
 
     
@@ -157,7 +165,7 @@ export default class Player {
         this.sprite.body.allowGravity = false; // opcional: congelar en el aire
         this.sprite.anims.stop(); // detener cualquier animación previa
 
-        this.setBodySize(15, 32, true);   // hitbox grande
+        this.setBodySize(14, 32, true);   // hitbox grande
         this.sprite.play('transform-grow');
     
         this.sprite.once(Phaser.Animations.Events.ANIMATION_COMPLETE, () => {

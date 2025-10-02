@@ -105,7 +105,7 @@ class GameScene extends Phaser.Scene {
     createEnemies(){
         this.enemies = this.physics.add.group();
 
-        const goomba1 = new Goomba(this, 200, 150);
+        const goomba1 = new Goomba(this, 400, 200);
         this.enemies.add(goomba1.sprite);
 
         this.physics.add.collider(this.enemies, this.groundLayer);
