@@ -145,6 +145,7 @@ export default class Block {
 
       const flower = this.scene.physics.add.staticSprite(spawnX, spawnY, 'flower');
       flower.setOrigin(0.5, 0);
+      flower.play('flower-idle');
 
       const riseDistance = flower.height;
 
@@ -152,6 +153,7 @@ export default class Block {
         distance: riseDistance,
         onComplete: () => {
           // La flor queda en su sitio, no se mueve ni tiene gravedad
+          
         }
       });
     

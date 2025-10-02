@@ -43,4 +43,5 @@ export default class AnimationHelper {
             onComplete
         });
     }
+
 }
