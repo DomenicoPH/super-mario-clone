@@ -75,7 +75,14 @@ export default class Block {
           this.spawnCoin();
           break;
         case 'mushroom':
-          this.spawnMushroom();
+          if(this.scene.player.size === 'big'){
+            this.spawnFlower();
+          } else {
+            this.spawnMushroom();
+          }
+          break;
+        case 'flower':
+          this.spawnFlower();
           break;
         default:
           console.log(`contenido desconocido: ${this.content}`)
@@ -131,6 +138,30 @@ export default class Block {
         this.scene.player.grow();
       })
     };
+
+    spawnFlower() {
+      const spawnX = this.sprite.x + this.sprite.width / 2;
+      const spawnY = this.sprite.y;
+
+      const flower = this.scene.physics.add.staticSprite(spawnX, spawnY, 'flower');
+      flower.setOrigin(0.5, 0);
+
+      const riseDistance = flower.height;
+
+      AnimationHelper.mushroomRise(this.scene, flower, {
+        distance: riseDistance,
+        onComplete: () => {
+          // La flor queda en su sitio, no se mueve ni tiene gravedad
+        }
+      });
+    
+      // Mario obtiene la flor al tocarla
+      this.scene.physics.add.overlap(this.scene.player.sprite, flower, () => {
+        flower.destroy();
+        console.log('power-up: flower');
+        this.scene.player.getFlower?.(); // más adelante implementar esto
+      });
+    }
 
     handleCollision(player, blockSprite) {
       if (player.body.touching.up && blockSprite.body.touching.down) {
