@@ -12,19 +12,19 @@ export default class AnimationHelper {
         });
     }
 
-    static coinPop(scene, coin, { rise = 50, drop = 35 } = {}){
+    static coinPop(scene, coin, { rise = 35, drop = 50 } = {}){
         // tween 1: sube
         scene.tweens.add({
             targets: coin,
             y: coin.y - rise,
-            duration: 200,
+            duration: 160,
             ease: 'Sine.easeOut',
             onComplete: () => {
                 // tween 2: baja y se destruye
                 scene.tweens.add({
                     targets: coin,
-                    y: coin.y - drop,
-                    duration: 100,
+                    y: (coin.y - rise) + drop,
+                    duration: 180,
                     ease: 'Sine.easeIn',
                     onComplete: () => coin.destroy(),
                 });
