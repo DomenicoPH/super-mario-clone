@@ -15,8 +15,8 @@ export default class Player {
 
         this.sprite.setCollideWorldBounds(true);
 
-        this.body.setMaxVelocity(maxSpeed, 500);
-        this.body.setDragX(drag);
+        this.sprite.body.setMaxVelocity(maxSpeed, 500);
+        this.sprite.body.setDragX(drag);
 
         this.createAnimations();
         this.cursors = scene.input.keyboard.createCursorKeys();

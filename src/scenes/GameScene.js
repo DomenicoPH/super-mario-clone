@@ -87,7 +87,7 @@ class GameScene extends Phaser.Scene {
 
     createPlayer(){
         this.player = new Player(this, 48, 200);
-        this.physics.add.collider(this.player, this.groundLayer);
+        this.physics.add.collider(this.player.sprite, this.groundLayer);
 
         this.blocksGroup = this.physics.add.staticGroup();
         this.blocks.forEach(block => {
