@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import Player from "../entities/Player";
 import Block from "../entities/Block";
+import Goomba from "../enemies/Goomba";
 import { createGridOverlay } from "../debug/gridOverlay";
 
 class GameScene extends Phaser.Scene {
@@ -14,6 +15,7 @@ class GameScene extends Phaser.Scene {
         this.createAnimations();
         this.createBlocks();
         this.createPlayer();
+        this.createEnemies();
         
         this.setupWorldBounds();
         this.setupCamera();   
@@ -26,6 +28,7 @@ class GameScene extends Phaser.Scene {
 
     update(){
         this.player.update();
+        this.enemies.getChildren().forEach(e => e.enemyRef.update());
     }
 
     /* --- Custom functions --- */
@@ -98,6 +101,25 @@ class GameScene extends Phaser.Scene {
             blockSprite.blockRef.handleCollision(player, blockSprite);
     }   );
     };
+
+    createEnemies(){
+        this.enemies = this.physics.add.group();
+
+        const goomba1 = new Goomba(this, 200, 150);
+        this.enemies.add(goomba1.sprite);
+
+        this.physics.add.collider(this.enemies, this.groundLayer);
+        this.physics.add.collider(this.enemies, this.blocksGroup);
+        this.physics.add.collider(this.player.sprite, this.enemies, (player, enemySprite) => {
+            const enemy = enemySprite.enemyRef;
+            if(player.body.touching.down && enemySprite.body.touching.up){
+                enemy.stomped();
+                player.setVelocityY(-200);
+            } else {
+                enemy.hitPlayer(this.player);
+            }
+        })
+    }
 
     setupWorldBounds(){
         const worldBounds = [true, true, false, true]
