@@ -35,6 +35,11 @@ export default class Player {
         anims.create({ key: 'big-walk', frames: anims.generateFrameNumbers('mario-big', {start: 1, end: 2}), frameRate: 8, repeat: -1 });
         anims.create({ key: 'big-jump', frames: [{ key: 'mario-big', frame: 5}], frameRate: 1});
 
+        // Mario Fire
+        anims.create({ key: 'fire-idle', frames: [{ key: 'mario-fire', frame: 0}], frameRate: 1});
+        anims.create({ key: 'fire-walk', frames: anims.generateFrameNumbers('mario-fire', {start: 1, end: 2}), frameRate: 8, repeat: -1 });
+        anims.create({ key: 'fire-jump', frames: [{ key: 'mario-fire', frame: 5}], frameRate: 1});
+
         // GROW animation
         anims.create({
             key: 'transform-grow',
@@ -67,6 +72,20 @@ export default class Player {
             ],
             frameRate: 12,
             repeat: 0
+        })
+
+        // FIRE-MARIO transform animation
+        anims.create({
+            key: 'transform-fire',
+            frames: [
+                { key: 'mario-big', frame: 0 },
+                { key: 'mario-fire', frame: 0 },
+                { key: 'mario-big', frame: 0 },
+                { key: 'mario-fire', frame: 0 },
+                { key: 'mario-fire', frame: 0 }
+            ],
+            frameRate: 12,
+            repeat: 0,
         })
     }
 
@@ -160,6 +179,26 @@ export default class Player {
           this.size = 'small';
           this.sprite.setTexture('mario-small');
           this.isTransforming = false;
+        });
+    }
+
+    powerUpFire() {
+        if (this.size !== 'big' || this.isTransforming) return;
+        
+        this.isTransforming = true;
+        
+        this.sprite.setVelocity(0, 0);
+        this.sprite.setAcceleration(0, 0);
+        this.sprite.body.allowGravity = false;
+        this.sprite.anims.stop();
+        
+        this.sprite.play('transform-fire');
+        
+        this.sprite.once(Phaser.Animations.Events.ANIMATION_COMPLETE, () => {
+            this.size = 'fire';
+            this.sprite.setTexture('mario-fire');
+            this.isTransforming = false;
+            this.sprite.body.allowGravity = true;
         });
     }
 

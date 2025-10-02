@@ -12,6 +12,7 @@ class PreloadScene extends Phaser.Scene {
 
         this.load.spritesheet('mario-small', '/assets/sprites/mario-small.png', { frameWidth: 16, frameHeight: 16 });
         this.load.spritesheet('mario-big', '/assets/sprites/mario-big.png', { frameWidth: 16, frameHeight: 32 });
+        this.load.spritesheet('mario-fire', '/assets/sprites/mario-fire.png', { frameWidth: 16, frameHeight: 32 });
         this.load.spritesheet('mario-trans', '/assets/sprites/mario-trans.png', { frameWidth: 16, frameHeight: 32 });
 
         this.load.image('block-brick', '/assets/sprites/brick-block-sprite.png');

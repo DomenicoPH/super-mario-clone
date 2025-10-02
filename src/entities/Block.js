@@ -75,7 +75,7 @@ export default class Block {
           this.spawnCoin();
           break;
         case 'mushroom':
-          if(this.scene.player.size === 'big'){
+          if(this.scene.player.size === 'big' || this.scene.player.size === 'fire'){
             this.spawnFlower();
           } else {
             this.spawnMushroom();
@@ -161,6 +161,7 @@ export default class Block {
       this.scene.physics.add.overlap(this.scene.player.sprite, flower, () => {
         flower.destroy();
         console.log('power-up: flower');
+        this.scene.player.powerUpFire();
         this.scene.player.getFlower?.(); // más adelante implementar esto
       });
     }
