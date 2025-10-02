@@ -18,6 +18,7 @@ class PreloadScene extends Phaser.Scene {
         this.load.image('block-brick', '/assets/sprites/brick-block-sprite.png');
         this.load.spritesheet('block-question', '/assets/sprites/question-block-spritesheet.png', { frameWidth:16, frameHeight:16 });
         this.load.image('block-question-empty', '/assets/sprites/question-block-empty.png');
+        this.load.spritesheet('broken-block', '/assets/sprites/broken-block.png', { frameWidth: 8, frameHeight: 8 });
 
         this.load.spritesheet('coin', '/assets/sprites/coin-spin.png', {frameWidth: 8, frameHeight: 16});
         this.load.image('mushroom', '/assets/sprites/mushroom-grow.png');

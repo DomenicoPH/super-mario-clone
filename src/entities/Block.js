@@ -133,9 +133,8 @@ export default class Block {
 
       this.scene.physics.add.overlap(this.scene.player.sprite, mushroom, () => {
         mushroom.destroy();
-        console.log('power-up')
-        // Logica para hacer crecer a Mario
         this.scene.player.grow();
+          console.log('power-up: mushroom')
       })
     };
 
@@ -151,28 +150,64 @@ export default class Block {
 
       AnimationHelper.mushroomRise(this.scene, flower, {
         distance: riseDistance,
-        onComplete: () => {
-          // La flor queda en su sitio, no se mueve ni tiene gravedad
-          
-        }
+        onComplete: () => {}
       });
     
-      // Mario obtiene la flor al tocarla
       this.scene.physics.add.overlap(this.scene.player.sprite, flower, () => {
         flower.destroy();
-        console.log('power-up: flower');
         this.scene.player.powerUpFire();
-        this.scene.player.getFlower?.(); // más adelante implementar esto
+        this.scene.player.getFlower?.();
+          console.log('power-up: flower');
       });
     }
 
-    handleCollision(player, blockSprite) {
-      if (player.body.touching.up && blockSprite.body.touching.down) {
-        this.bump();
+    breakBlock() {
+        if (this.isAnimating || this.used) return;
+        this.isAnimating = true;
 
-        // - generar un power-up
-        // - cambiar el sprite del bloque a "vacío"
+        const pieces = [];
+        const blockX = this.sprite.x + this.sprite.width / 2;
+        const blockY = this.sprite.y + this.sprite.height / 2;
+
+        // Crear 4 pedazos usando frames 0,1,2,3 del spritesheet broken-block
+        for (let i = 0; i < 4; i++) {
+            const piece = this.scene.physics.add.sprite(blockX, blockY, 'broken-block', i);
+            piece.setOrigin(0.5);
+            piece.setDepth(10);
+            piece.body.allowGravity = true;
+            piece.setBounce(0.3);
+        
+            pieces.push(piece);
+        }
+      
+        // Animación en arco
+        pieces[0].setVelocity(-100, -200); // arriba-izquierda
+        pieces[1].setVelocity(100, -200);  // arriba-derecha
+        pieces[2].setVelocity(-50, -150);  // abajo-izquierda
+        pieces[3].setVelocity(50, -150);   // abajo-derecha
+      
+        // Destruir pedazos después de 1.5 segundos
+        this.scene.time.delayedCall(1500, () => {
+            pieces.forEach(p => p.destroy());
+        });
+      
+        // Destruir el bloque original
+        this.sprite.destroy();
+        this.isAnimating = false;
+        this.used = true;
+    }
+
+    handleCollision(player, blockSprite) {
+      if (!player?.body || !blockSprite?.body) return;
+
+      if (player.body.touching.up && blockSprite.body.touching.down) {
+        const playerSize = this.scene.player?.size;
+        if (this.type === 'brick' && (playerSize === 'big' || playerSize === 'fire')) {
+          this.breakBlock();
+        } else {
+          this.bump();
+        }
       }
-    };
+    }
 
 }
