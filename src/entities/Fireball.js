@@ -58,9 +58,18 @@ export default class Fireball {
     }
   }
 
-  destroy() {
-    if (this.sprite && this.sprite.scene) {
-      this.sprite.destroy();
+  destroy(withExplosion = true) {
+    if(!this.sprite || !this.sprite.scene) return;
+
+    const { x, y } = this.sprite;
+
+    if (withExplosion && this.scene.anims.exists('fireball-explode')) {
+        const explosion = this.scene.add.sprite(x, y, 'fireball-explode');
+        explosion.setDepth(15);
+        explosion.play('fireball-explode');
+
+        explosion.on('animationcomplete', () => explosion.destroy());
     }
+    this.sprite.destroy();
   }
 }

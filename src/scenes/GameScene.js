@@ -80,6 +80,14 @@ class GameScene extends Phaser.Scene {
             frameRate: 12,
             repeat: -1
         })
+
+        this.anims.create({
+            key: 'fireball-explode',
+            frames: this.anims.generateFrameNumbers('fireball-explode', { start: 0, end: 2 }),
+            frameRate: 20,
+            repeat: 0,
+            hideOnComplete: true,
+        })
     };
 
     createBlocks(){
