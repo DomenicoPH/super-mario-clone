@@ -15,6 +15,7 @@ class GameScene extends Phaser.Scene {
         this.createAnimations();
         this.createBlocks();
         this.createPlayer();
+        this.createFireballs();
         this.createEnemies();
         
         this.setupWorldBounds();
@@ -29,6 +30,7 @@ class GameScene extends Phaser.Scene {
     update(){
         this.player.update();
         this.enemies.getChildren().forEach(e => e.enemyRef.update());
+        this.fireballs?.getChildren().forEach( f => f.fireballRef?.update());
     }
 
     /* --- Custom functions --- */
@@ -62,13 +64,20 @@ class GameScene extends Phaser.Scene {
             key: 'coin-spin',
             frames: this.anims.generateFrameNumbers('coin', {start: 0, end: 3}),
             frameRate: 10,
-            repeat: -1,
+            repeat: -1
         })
 
         this.anims.create({
             key: 'flower-idle',
             frames: this.anims.generateFrameNumbers('flower', { start: 0, end: 3 }),
             frameRate: 6,
+            repeat: -1
+        })
+
+        this.anims.create({
+            key: 'fireball-spin',
+            frames: this.anims.generateFrameNumbers('fireball', { start: 0, end: 3 }),
+            frameRate: 12,
             repeat: -1
         })
     };
@@ -119,6 +128,28 @@ class GameScene extends Phaser.Scene {
                 enemy.hitPlayer(this.player);
             }
         })
+
+        //fireballs
+        this.physics.add.overlap(this.fireballs, this.enemies, (fbSprite, enemySprite) => {
+            const fb = fbSprite.fireballRef;
+            const enemy = enemySprite.enemyRef;
+            if(enemy && enemy.stomped){
+                enemy.stomped();
+            } else {
+                enemySprite.destroy?.();
+            }
+            fb?.destroy();
+        })
+    }
+
+    createFireballs() {
+      this.fireballs = this.physics.add.group();
+
+      // 1. Collider con el suelo
+      this.physics.add.collider(this.fireballs, this.groundLayer);
+
+      // 2. Collider con los bloques
+      this.physics.add.collider(this.fireballs, this.blocksGroup);
     }
 
     setupWorldBounds(){

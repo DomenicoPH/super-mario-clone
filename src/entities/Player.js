@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import Fireball from "./Fireball";
 
 const maxSpeed = 160;
 const acceleration = 300;
@@ -17,6 +18,8 @@ export default class Player {
 
         this.sprite.body.setMaxVelocity(maxSpeed, 500);
         this.sprite.body.setDragX(drag);
+
+        this.shootKey = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z); //tecla fireball (Z)
 
         this.createAnimations();
         this.cursors = scene.input.keyboard.createCursorKeys();
@@ -100,10 +103,15 @@ export default class Player {
             this.body.onFloor() ? 10 : 8, 
             this.sprite.body.height
         );
+        
         (this.size === 'big' || this.size === 'fire') && this.sprite.setSize(
             this.body.onFloor() ? 14 : 11,
             this.sprite.body.height
-        ) 
+        );
+
+        if(Phaser.Input.Keyboard.JustDown(this.shootKey)){
+            this.shootFireball();
+        }
     }
 
     
@@ -208,6 +216,21 @@ export default class Player {
             this.isTransforming = false;
             this.sprite.body.allowGravity = true;
         });
+    }
+
+    shootFireball(){
+        if(this.size !== 'fire' || this.isTransforming) return;
+
+        const active = (this.scene.fireballs?.getChildren() ?? []).filter( s => s.active ).length;
+        if(active >= 2) return;
+
+        const dir = this.sprite.flipX ? -1 : 1;
+        const offsetX = dir * (this.sprite.displayWidth * 0.5 + 4);
+        const spawnX = this.sprite.x + offsetX;
+        const spawnY = this.sprite.y + 8;
+
+        const fireball = new Fireball(this.scene, spawnX, spawnY, dir);
+        this.scene.fireballs.add(fireball.sprite);
     }
 
 };
