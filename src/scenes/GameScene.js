@@ -32,6 +32,7 @@ class GameScene extends Phaser.Scene {
         this.player.update();
         this.enemies.getChildren().forEach(e => e.enemyRef.update());
         this.fireballs?.getChildren().forEach( f => f.fireballRef?.update());
+        this.handleEnemySpawning();
     }
 
     /* --- Custom functions --- */
@@ -82,34 +83,102 @@ class GameScene extends Phaser.Scene {
     }   );
     };
 
-    createEnemies(){
+    createEnemies() {
         this.enemies = this.physics.add.group();
+        this.enemySpawnData = [];
 
-        const goomba1 = new Goomba(this, 400, 200);
-        this.enemies.add(goomba1.sprite);
+        // Leer todos los objetos desde la capa "enemies"
+        const enemyObjects = this.map.getObjectLayer('enemies')?.objects || [];
 
+        enemyObjects.forEach(obj => {
+            const type = obj.type || (obj.properties?.find(p => p.name === 'type')?.value);
+            this.enemySpawnData.push({
+                type,
+                x: obj.x,
+                y: obj.y,
+                spawned: false
+            });
+        });
+
+        // Colisiones con entorno
         this.physics.add.collider(this.enemies, this.groundLayer);
         this.physics.add.collider(this.enemies, this.blocksGroup);
-        this.physics.add.collider(this.player.sprite, this.enemies, (player, enemySprite) => {
+
+        // Colisión con otros enemigos
+        this.physics.add.collider(this.enemies, this.enemies, (enemyA, enemyB) => {
+            const eA = enemyA.enemyRef;
+            const eB = enemyB.enemyRef;
+                
+            if (!eA?.alive || !eB?.alive) return;
+                
+            // Determinar quién está a la izquierda
+            if (enemyA.x < enemyB.x) {
+                // A viene de la izquierda, rebota hacia la izquierda
+                eA.sprite.setVelocityX(-Math.abs(eA.speed));
+                eA.sprite.flipX = false;
+            
+                // B viene de la derecha, rebota hacia la derecha
+                eB.sprite.setVelocityX(Math.abs(eB.speed));
+                eB.sprite.flipX = true;
+            
+                // Separar ligeramente
+                enemyA.x -= 2;
+                enemyB.x += 2;
+            } else {
+                // A viene de la derecha
+                eA.sprite.setVelocityX(Math.abs(eA.speed));
+                eA.sprite.flipX = true;
+            
+                // B viene de la izquierda
+                eB.sprite.setVelocityX(-Math.abs(eB.speed));
+                eB.sprite.flipX = false;
+            
+                // Separar ligeramente
+                enemyA.x += 2;
+                enemyB.x -= 2;
+            }
+        });
+
+        // Colisión jugador / enemigos
+        this.physics.add.collider(this.player.sprite, this.enemies, (playerSprite, enemySprite) => {
             const enemy = enemySprite.enemyRef;
-            if(player.body.touching.down && enemySprite.body.touching.up){
+            const playerBody = playerSprite.body;
+
+            if (playerBody.touching.down && enemySprite.body.touching.up) {
                 enemy.stomped();
-                player.setVelocityY(-200);
+                playerSprite.setVelocityY(-200);
             } else {
                 enemy.hitPlayer(this.player);
             }
-        })
+        });
 
-        //fireballs
+        // Fireballs / enemigos * REVISAR
         this.physics.add.overlap(this.fireballs, this.enemies, (fbSprite, enemySprite) => {
             const fb = fbSprite.fireballRef;
             const enemy = enemySprite.enemyRef;
-            if(enemy && enemy.stomped){
-                enemy.stomped();
-            } else {
-                enemySprite.destroy?.();
+
+            enemy?.stomped?.();
+            fb?.explodeAndDestroy?.();
+        });
+    }
+
+    handleEnemySpawning(){
+        const playerX = this.player.sprite.x;
+        const activationDistance = 200;
+
+        this.enemySpawnData.forEach(data => {
+            if(!data.spawned && data.x - playerX < activationDistance){
+                data.spawned = true;
+
+                let enemy;
+                if(data.type === 'goomba'){
+                    enemy = new Goomba(this, data.x, data.y);
+                }
+
+                if(enemy){
+                    this.enemies.add(enemy.sprite);
+                }
             }
-            fb?.destroy();
         })
     }
 

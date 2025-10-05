@@ -188,13 +188,19 @@ export default class Player {
         if (this.size !== 'big' || this.isTransforming) return;
         
         this.isTransforming = true;
-        this.setBodySize(10, 16, true);    // hitbox chico
-        this.sprite.play('transform-shrink');
         
+        const oldBottom = this.sprite.body.bottom; // guardamos los pies actuales
+        
+        this.sprite.play('transform-shrink');
         this.sprite.once(Phaser.Animations.Events.ANIMATION_COMPLETE, () => {
-          this.size = 'small';
-          this.sprite.setTexture('mario-small');
-          this.isTransforming = false;
+            this.size = 'small';
+            this.sprite.setTexture('mario-small');
+            this.sprite.setSize(10, 16);
+        
+            // mantener pies en el suelo:
+            this.sprite.y = oldBottom - this.sprite.body.halfHeight;
+        
+            this.isTransforming = false;
         });
     }
 

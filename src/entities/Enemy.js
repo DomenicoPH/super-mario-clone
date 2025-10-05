@@ -7,16 +7,25 @@ export default class Enemy {
 
         this.sprite = scene.physics.add.sprite(x, y, spriteKey);
         this.sprite.setCollideWorldBounds(true);
-        this.sprite.setBounce(1, 0);
+        this.sprite.setBounce(0);
         this.sprite.setVelocityX(-50);
         this.sprite.enemyRef = this;
         this.alive = true;
+        this.speed = 50;
     }
 
     update(){
         if(!this.alive) return;
-        if(this.sprite.body.left) this.sprite.setVelocityX(50)
-        if(this.sprite.body.right) this.sprite.setVelocityX(-50)
+        this.sprite.setVelocityX(this.sprite.body.velocity.x > 0 ? this.speed : -this.speed);
+
+        // Si choca con un muro..
+        if(this.sprite.body.blocked.left){
+            this.sprite.setVelocityX(this.speed);
+            this.sprite.flipX = true;
+        } else if(this.sprite.body.blocked.right){
+            this.sprite.setVelocityX(-this.speed)
+            this.sprite.flipX = false;
+        }
     }
 
     // custom methods
@@ -30,7 +39,7 @@ export default class Enemy {
         this.sprite.disableBody(true, false);
 
         this.sprite.body.setSize(this.sprite.body.width, this.sprite.body.height / 2);
-        this.sprite.body.position += this.sprite.body.height / 2;
+        this.sprite.body.position.y += this.sprite.body.height / 2;
         
         this.scene.time.delayedCall(500, () => this.sprite.destroy());
     }

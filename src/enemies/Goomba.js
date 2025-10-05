@@ -8,7 +8,7 @@ export default class Goomba extends Enemy {
         this.scene.anims.create({
             key: 'goomba-walk',
             frames: this.scene.anims.generateFrameNumbers('goomba', { start: 0, end: 1 }),
-            frameRate: 4,
+            frameRate: 8,
             repeat: -1
         });
 
