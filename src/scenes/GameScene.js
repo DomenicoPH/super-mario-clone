@@ -2,6 +2,7 @@ import Phaser from "phaser";
 import Player from "../entities/Player";
 import Block from "../entities/Block";
 import Goomba from "../enemies/Goomba";
+import { createAnimations } from "../utils/createAnimations";
 import { createGridOverlay } from "../debug/gridOverlay";
 
 class GameScene extends Phaser.Scene {
@@ -10,9 +11,9 @@ class GameScene extends Phaser.Scene {
     }
 
     create(){
+        createAnimations(this);
         this.createBackground();
         this.createMap();
-        this.createAnimations();
         this.createBlocks();
         this.createPlayer();
         this.createFireballs();
@@ -50,44 +51,6 @@ class GameScene extends Phaser.Scene {
         this.groundLayer.setCollisionByProperty({ collides: true });
 
         this.decorLayer = map.createLayer('decoration', tileset);
-    };
-
-    createAnimations(){
-        this.anims.create({
-            key: 'block-question-idle',
-            frames: this.anims.generateFrameNumbers('block-question', { start: 0, end: 2 }),
-            frameRate: 4,
-            repeat: -1
-        });
-
-        this.anims.create({
-            key: 'coin-spin',
-            frames: this.anims.generateFrameNumbers('coin', {start: 0, end: 3}),
-            frameRate: 10,
-            repeat: -1
-        })
-
-        this.anims.create({
-            key: 'flower-idle',
-            frames: this.anims.generateFrameNumbers('flower', { start: 0, end: 3 }),
-            frameRate: 6,
-            repeat: -1
-        })
-
-        this.anims.create({
-            key: 'fireball-spin',
-            frames: this.anims.generateFrameNumbers('fireball', { start: 0, end: 3 }),
-            frameRate: 12,
-            repeat: -1
-        })
-
-        this.anims.create({
-            key: 'fireball-explode',
-            frames: this.anims.generateFrameNumbers('fireball-explode', { start: 0, end: 2 }),
-            frameRate: 20,
-            repeat: 0,
-            hideOnComplete: true,
-        })
     };
 
     createBlocks(){
