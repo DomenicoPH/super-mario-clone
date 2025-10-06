@@ -185,7 +185,7 @@ export default class Player {
     }
 
     shrink() {
-        if (this.size !== 'big' || this.isTransforming) return;
+        if (this.size !== 'big' && this.size !== 'fire' || this.isTransforming) return;
         
         this.isTransforming = true;
         

@@ -44,13 +44,41 @@ export default class Enemy {
         this.scene.time.delayedCall(500, () => this.sprite.destroy());
     }
 
-    hitPlayer(){
-        if(!this.alive) return;
+    hitPlayer(player, enemyCollider) {
+        if (!this.alive) return;
+        if (player.invulnerable) return;
 
-        const player = this.scene.player;
-        
-        if(player.size === 'big' || player.size === 'fire'){
+        if (player.size === 'big' || player.size === 'fire') {
+            player.invulnerable = true;
+
+            this.scene.physics.world.pause();
+            player.sprite.setVelocity(0, 0);
+            this.sprite.setVelocity(0, 0);
+
             player.shrink();
+
+            this.scene.time.delayedCall(800, () => {
+                this.scene.physics.world.resume();
+
+                if (enemyCollider) enemyCollider.active = false;
+
+                player.sprite.setAlpha(0.5);
+                this.scene.tweens.add({
+                    targets: player.sprite,
+                    alpha: 0.2,
+                    ease: 'Linear',
+                    duration: 200,
+                    repeat: 5,
+                    yoyo: true,
+                    onComplete: () => {
+                        player.sprite.setAlpha(1);
+
+                        if (enemyCollider) enemyCollider.active = true;
+
+                        player.invulnerable = false;
+                    }
+                });
+            });
         } else {
             this.scene.gameOver();
         }
