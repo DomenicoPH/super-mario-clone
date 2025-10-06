@@ -11,6 +11,7 @@ class GameScene extends Phaser.Scene {
     }
 
     create(){
+        this.isGameOver = false;
         createAnimations(this);
         this.createBackground();
         this.createMap();
@@ -29,6 +30,8 @@ class GameScene extends Phaser.Scene {
     }
 
     update(){
+        if(this.isGameOver) return;
+        
         this.player.update();
         this.enemies.getChildren().forEach(e => e.enemyRef.update());
         this.fireballs?.getChildren().forEach( f => f.fireballRef?.update());
@@ -190,6 +193,45 @@ class GameScene extends Phaser.Scene {
 
       // 2. Collider con los bloques
       this.physics.add.collider(this.fireballs, this.blocksGroup);
+    }
+
+    gameOver(){
+        if(this.isGameOver) return;
+        this.isGameOver = true;
+
+        this.pauseAll();
+
+        const { width, height } = this.sys.game.canvas;
+        this.add.text(width / 2, height / 2, 'GAME OVER', {
+            fontSize: '10px',
+            color: '#a71414ff',
+            fontFamily: 'Arial',
+            fontStyle: 'bold'
+        }).setOrigin(0.5).setScrollFactor(0);
+
+        this.time.delayedCall(2000, () => {
+            this.scene.restart();
+        });
+    }
+
+    pauseAll(){
+        this.player.sprite.anims.pause();
+
+        this.enemies.getChildren().forEach(enemySprite => {
+            enemySprite.enemyRef?.sprite?.anims.pause();
+            enemySprite.enemyRef.alive = false;
+        });
+
+        this.fireballs?.getChildren().forEach(fbSprite => {
+            fbSprite.fireballRef?.sprite?.anims.pause();
+        });
+
+        this.blocks?.forEach( block => {
+            block.sprite.anims?.pause();
+            block.isAnimating = false;
+        });
+
+        this.physics.world.pause();
     }
 
     setupWorldBounds(){
