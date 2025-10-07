@@ -35,6 +35,7 @@ export default class Enemy {
 
         //animación de aplastamiento
         this.sprite.setVelocity(0, 0);
+        this.sprite.anims.stop();
         this.sprite.setFrame(2);
         this.sprite.disableBody(true, false);
 
