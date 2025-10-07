@@ -46,43 +46,42 @@ export default class Enemy {
     }
 
     hitPlayer(player) {
-        if (!this.alive) return;
-        if (player.invulnerable) return;
+    if (!this.alive) return;
+    if (player.invulnerable) return;
 
-        if (player.size === 'big' || player.size === 'fire') {
-            player.invulnerable = true;
+    if (player.size === 'big' || player.size === 'fire') {
+        player.invulnerable = true;
+        player.ignoreEnemySide = true; // Activar inmediatamente
 
-            this.scene.physics.world.pause();
-            player.sprite.setVelocity(0, 0);
-            this.sprite.setVelocity(0, 0);
+        // Pausar brevemente para la animación de encogimiento
+        this.scene.physics.world.pause();
+        player.sprite.setVelocity(0, 0);
+        this.sprite.setVelocity(0, 0);
 
-            player.shrink();
+        player.shrink();
 
-            this.scene.time.delayedCall(800, () => {
-                this.scene.physics.world.resume();
+        this.scene.time.delayedCall(800, () => {
+            this.scene.physics.world.resume();
 
-                player.ignoreEnemySide = true;
-
-                player.sprite.setAlpha(0.5);
-                this.scene.tweens.add({
-                    targets: player.sprite,
-                    alpha: 0.2,
-                    ease: 'Linear',
-                    duration: 200,
-                    repeat: 5,
-                    yoyo: true,
-                    onComplete: () => {
-                        player.sprite.setAlpha(1);
-
-                        player.ignoreEnemySide = false;
-
-                        player.invulnerable = false;
-                    }
-                });
+            // Efecto de parpadeo
+            player.sprite.setAlpha(0.5);
+            this.scene.tweens.add({
+                targets: player.sprite,
+                alpha: 0.2,
+                ease: 'Linear',
+                duration: 200,
+                repeat: 5,
+                yoyo: true,
+                onComplete: () => {
+                    player.sprite.setAlpha(1);
+                    player.ignoreEnemySide = false; // Reactivar colisiones laterales
+                    player.invulnerable = false;
+                }
             });
-        } else {
-            this.scene.gameOver();
-        }
+        });
+    } else {
+        this.scene.gameOver();
     }
+}
 
 }

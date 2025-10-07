@@ -143,20 +143,13 @@ class GameScene extends Phaser.Scene {
         });
 
         // Colisión jugador / enemigos
-        this.physics.add.collider(
+        this.physics.add.overlap(
             this.player.sprite, 
             this.enemies, 
             (playerSprite, enemySprite) => {
-            const enemy = enemySprite.enemyRef;
-            const playerBody = playerSprite.body;
-
-            if (playerBody.touching.down && enemySprite.body.touching.up) {
-                enemy.stomped();
-                playerSprite.setVelocityY(-200);
-            } else if(!this.player.ignoreEnemySide){
-                enemy.hitPlayer(this.player);
+                this.handlePlayerEnemyCollision(playerSprite, enemySprite);
             }
-        });
+        );
 
         // Fireballs / enemigos * REVISAR
         this.physics.add.overlap(this.fireballs, this.enemies, (fbSprite, enemySprite) => {
@@ -166,6 +159,29 @@ class GameScene extends Phaser.Scene {
             enemy?.stomped?.();
             fb?.explodeAndDestroy?.();
         });
+    }
+
+    handlePlayerEnemyCollision(playerSprite, enemySprite) {
+        const enemy = enemySprite.enemyRef;
+        const player = this.player;
+        
+        if (!enemy || !enemy.alive) return;
+        
+        // Calcular dirección de la colisión
+        const playerBottom = playerSprite.body.bottom;
+        const enemyTop = enemySprite.body.top;
+        const verticalOverlap = playerBottom - enemyTop;
+        
+        // Si el jugador está cayendo y se superpone significativamente por arriba -> STOMP
+        if (playerSprite.body.velocity.y > 0 && verticalOverlap > 0 && verticalOverlap < 10) {
+            enemy.stomped();
+            playerSprite.setVelocityY(-200);
+        } 
+        // Si no es stomp y el jugador no ignora colisiones laterales
+        else if (!player.ignoreEnemySide) {
+            enemy.hitPlayer(player);
+        }
+        // Si ignoreEnemySide es true, NO HACER NADA - permitir superposición
     }
 
     handleEnemySpawning(){
@@ -189,13 +205,13 @@ class GameScene extends Phaser.Scene {
     }
 
     createFireballs() {
-      this.fireballs = this.physics.add.group();
+        this.fireballs = this.physics.add.group();
 
-      // 1. Collider con el suelo
-      this.physics.add.collider(this.fireballs, this.groundLayer);
+        // 1. Collider con el suelo
+        this.physics.add.collider(this.fireballs, this.groundLayer);
 
-      // 2. Collider con los bloques
-      this.physics.add.collider(this.fireballs, this.blocksGroup);
+        // 2. Collider con los bloques
+        this.physics.add.collider(this.fireballs, this.blocksGroup);
     }
 
     gameOver(){
