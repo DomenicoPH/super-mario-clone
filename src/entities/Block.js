@@ -155,7 +155,11 @@ export default class Block {
     
       this.scene.physics.add.overlap(this.scene.player.sprite, flower, () => {
         flower.destroy();
-        this.scene.player.powerUpFire();
+        if(this.scene.player.size === 'small'){
+          this.scene.player.grow();
+        } else {
+          this.scene.player.powerUpFire();
+        }
         this.scene.player.getFlower?.();
           console.log('power-up: flower');
       });
