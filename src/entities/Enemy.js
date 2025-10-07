@@ -44,7 +44,7 @@ export default class Enemy {
         this.scene.time.delayedCall(500, () => this.sprite.destroy());
     }
 
-    hitPlayer(player, enemyCollider) {
+    hitPlayer(player) {
         if (!this.alive) return;
         if (player.invulnerable) return;
 
@@ -60,7 +60,7 @@ export default class Enemy {
             this.scene.time.delayedCall(800, () => {
                 this.scene.physics.world.resume();
 
-                if (enemyCollider) enemyCollider.active = false;
+                player.ignoreEnemySide = true;
 
                 player.sprite.setAlpha(0.5);
                 this.scene.tweens.add({
@@ -73,7 +73,7 @@ export default class Enemy {
                     onComplete: () => {
                         player.sprite.setAlpha(1);
 
-                        if (enemyCollider) enemyCollider.active = true;
+                        player.ignoreEnemySide = false;
 
                         player.invulnerable = false;
                     }

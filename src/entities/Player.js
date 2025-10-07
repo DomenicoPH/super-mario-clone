@@ -11,6 +11,7 @@ export default class Player {
         this.scene = scene;
         this.size = 'small';
         this.isTransforming = false;
+        this.invulnerable = false;
 
         this.sprite = scene.physics.add.sprite(x, y, 'mario-small').setSize(10, 16);
 

@@ -143,7 +143,7 @@ class GameScene extends Phaser.Scene {
         });
 
         // Colisión jugador / enemigos
-        this.playerEnemyCollider = this.physics.add.collider(
+        this.physics.add.collider(
             this.player.sprite, 
             this.enemies, 
             (playerSprite, enemySprite) => {
@@ -153,8 +153,8 @@ class GameScene extends Phaser.Scene {
             if (playerBody.touching.down && enemySprite.body.touching.up) {
                 enemy.stomped();
                 playerSprite.setVelocityY(-200);
-            } else {
-                enemy.hitPlayer(this.player, this.playerEnemyCollider);
+            } else if(!this.player.ignoreEnemySide){
+                enemy.hitPlayer(this.player);
             }
         });
 
