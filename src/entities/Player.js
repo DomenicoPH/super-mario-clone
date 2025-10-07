@@ -234,10 +234,21 @@ export default class Player {
         const dir = this.sprite.flipX ? -1 : 1;
         const offsetX = dir * (this.sprite.displayWidth * 0.5 + 4);
         const spawnX = this.sprite.x + offsetX;
-        const spawnY = this.sprite.y + 8;
+        const spawnY = this.sprite.y + 2;
+
+            // Cambio de sprite al disparar
+            const prevTexture = this.sprite.texture.key;
+            const prevFrame = this.sprite.frame.name;
+            this.sprite.setTexture('mario-fire-shoot');
+            this.sprite.setOrigin(0.5);
 
         const fireball = new Fireball(this.scene, spawnX, spawnY, dir);
         this.scene.fireballs.add(fireball.sprite);
+
+            // Restaura la sprite despues de 250 ms
+            this.scene.time.delayedCall(250, () => {
+                this.sprite.setTexture(prevTexture, prevFrame)
+            })
     }
 
 };
