@@ -33,6 +33,24 @@ export default class AudioManager {
             config: { volume: 0.4, rate: 1.0 }
         });
 
+        //powerdown sound
+        this.sounds.set('powerdown', {
+            key: 'powerdown-sound',
+            config: { volume: 0.4, rate: 1.0 }
+        })
+
+        //pipe travel sound
+        this.sounds.set('pipe', {
+            key: 'pipe-sound',
+            config: { volume: 0.4, rate: 1.0 }
+        })
+
+        //stomp sound
+        this.sounds.set('stomp', {
+            key: 'stomp-sound',
+            config: { volume: 0.4, rate: 1.0 }
+        })
+
         //coin sound
         this.sounds.set('coin', {
             key: 'coin-sound',
@@ -72,6 +90,9 @@ export default class AudioManager {
     playJumpSuper(){ return this.play('jump-super') };
     playPowerUpAppears(){ return this.play('powerup-appears') };
     playPowerUp(){ return this.play('powerup') };
+    playPowerDown(){ return this.play('powerdown') };
+    playStomp(){ return this.play('stomp') };
+    playPipe(){ return this.play('pipe') };
     playCoin(){ return this.play('coin') };
     playFireball(){ return this.play('fireball') };
 
