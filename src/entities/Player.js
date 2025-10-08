@@ -132,8 +132,15 @@ export default class Player {
             this.sprite.setAccelerationX(0);
         }
 
+        // jump
         if(Phaser.Input.Keyboard.JustDown(space) && this.body.onFloor()){
             this.sprite.setVelocityY(jumpForce);
+            //sound:
+            if(this.size === 'small'){
+                this.scene.audio.playJumpSmall();
+            } else {
+                this.scene.audio.playJumpSuper();
+            }
         }
 
         if (this.body.onFloor()) {
@@ -234,7 +241,7 @@ export default class Player {
         const dir = this.sprite.flipX ? -1 : 1;
         const offsetX = dir * (this.sprite.displayWidth * 0.5 + 4);
         const spawnX = this.sprite.x + offsetX;
-        const spawnY = this.sprite.y + 2;
+        const spawnY = this.sprite.y;
 
             // Cambio de sprite al disparar
             const prevTexture = this.sprite.texture.key;
@@ -249,6 +256,9 @@ export default class Player {
             this.scene.time.delayedCall(250, () => {
                 this.sprite.setTexture(prevTexture, prevFrame)
             })
+
+        //sound:
+        this.scene.audio.playFireball();
     }
 
 };

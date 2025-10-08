@@ -3,6 +3,7 @@ import Player from "../entities/Player";
 import Block from "../entities/Block";
 import Goomba from "../enemies/Goomba";
 import { createAnimations } from "../utils/createAnimations";
+import AudioManager from "../utils/AudioManager";
 import { createGridOverlay } from "../debug/gridOverlay";
 
 class GameScene extends Phaser.Scene {
@@ -24,6 +25,8 @@ class GameScene extends Phaser.Scene {
         this.setupCamera();   
         
         this.bumpables = this.physics.add.group();
+
+        this.audio = new AudioManager(this);
         
         //debug..
         //createGridOverlay(this, this.map);

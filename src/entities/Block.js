@@ -90,6 +90,9 @@ export default class Block {
     };
 
     spawnCoin(){
+      //sound:
+      this.scene.audio.playCoin();
+
       const spawnX = this.sprite.x + this.sprite.width / 2;
       const spawnY = this.sprite.y;
 
@@ -125,6 +128,9 @@ export default class Block {
         }
       });
 
+      //sound:
+      this.scene.audio.playPowerUpAppears();
+
       //colisiones
       this.scene.physics.add.collider(mushroom, this.scene.groundLayer);
       this.scene.blocks.forEach( block => {
@@ -132,6 +138,8 @@ export default class Block {
       })
 
       this.scene.physics.add.overlap(this.scene.player.sprite, mushroom, () => {
+        //sound:
+        this.scene.audio.playPowerUp();
         mushroom.destroy();
         this.scene.player.grow();
           console.log('power-up: mushroom')
@@ -152,8 +160,13 @@ export default class Block {
         distance: riseDistance,
         onComplete: () => {}
       });
+
+      //sound:
+      this.scene.audio.playPowerUpAppears();
     
       this.scene.physics.add.overlap(this.scene.player.sprite, flower, () => {
+        //sound:
+        this.scene.audio.playPowerUp();
         flower.destroy();
         if(this.scene.player.size === 'small'){
           this.scene.player.grow();

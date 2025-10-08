@@ -29,6 +29,14 @@ class PreloadScene extends Phaser.Scene {
         this.load.spritesheet('flower', '/assets/sprites/fire-flower.png', { frameWidth:16, frameHeight:16 });
 
         this.load.spritesheet('goomba', '/assets/sprites/goomba-normal.png', { frameWidth:16, frameHeight:16 });
+
+        //SOUND
+        this.load.audio('jump-small-sound', '/assets/sound/smb_jump-small.wav');
+        this.load.audio('jump-super-sound', '/assets/sound/smb_jump-super.wav');
+        this.load.audio('powerup-appears-sound', '/assets/sound/smb_powerup_appears.wav');
+        this.load.audio('powerup-sound', '/assets/sound/smb_powerup.wav');
+        this.load.audio('coin-sound', '/assets/sound/smb_coin.wav');
+        this.load.audio('fireball-sound', '/assets/sound/smb_fireball.wav');
     }
 
     create(){
