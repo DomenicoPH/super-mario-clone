@@ -38,6 +38,8 @@ export default class Enemy {
         this.sprite.anims.stop();
         this.sprite.setFrame(2);
         this.sprite.disableBody(true, false);
+        //sound
+        this.scene.audio.playStomp();
 
         this.sprite.body.setSize(this.sprite.body.width, this.sprite.body.height / 2);
         this.sprite.body.position.y += this.sprite.body.height / 2;
@@ -57,6 +59,8 @@ export default class Enemy {
         this.scene.physics.world.pause();
         player.sprite.setVelocity(0, 0);
         this.sprite.setVelocity(0, 0);
+        //sound
+        this.scene.audio.playPowerDown();
 
         player.shrink();
 
