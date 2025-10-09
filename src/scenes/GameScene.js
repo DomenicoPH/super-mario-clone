@@ -39,6 +39,7 @@ class GameScene extends Phaser.Scene {
         this.enemies.getChildren().forEach(e => e.enemyRef.update());
         this.fireballs?.getChildren().forEach( f => f.fireballRef?.update());
         this.handleEnemySpawning();
+        this.cameras.main.scrollY = 0;
     }
 
     /* --- Custom functions --- */
@@ -226,7 +227,7 @@ class GameScene extends Phaser.Scene {
         const { width, height } = this.sys.game.canvas;
         this.add.text(width / 2, height / 2, 'GAME OVER', {
             fontSize: '10px',
-            color: '#a71414ff',
+            color: '#fff',
             fontFamily: 'Arial',
             fontStyle: 'bold'
         }).setOrigin(0.5).setScrollFactor(0);
@@ -263,8 +264,8 @@ class GameScene extends Phaser.Scene {
 
     setupCamera(){
         this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
-        this.cameras.main.startFollow(this.player.sprite);
-        this.cameras.main.setFollowOffset(0, 80);
+        this.cameras.main.scrollY = 0;
+        this.cameras.main.startFollow(this.player.sprite, false, 1, 0);
     };
 
 }
