@@ -223,7 +223,7 @@ class GameScene extends Phaser.Scene {
         if(this.isGameOver) return;
         
         // Usar un valor fijo más alto para testing
-        const deathThreshold = 400; // Valor alto temporal
+        const deathThreshold = 300; // distancia debajo del borde inferior de la camara
         
         if(this.player.sprite.y > deathThreshold){
             console.log('Muerte por caída detectada');
@@ -232,34 +232,59 @@ class GameScene extends Phaser.Scene {
     }
 
     gameOver(options = {}) {
-        if(this.isGameOver) return;
+        if (this.isGameOver) return;
         this.isGameOver = true;
 
-        // Opciones por defecto
         const { withAnimation = false } = options;
+
+        // Detener enemigos y fireballs inmediatamente
+        this.enemies.getChildren().forEach(enemySprite => {
+            const e = enemySprite.enemyRef;
+            if (e) {
+                e.alive = false;
+                e.sprite.setVelocity(0, 0);
+                e.sprite.anims.pause();
+            }
+        });
+
+        this.fireballs?.getChildren().forEach(fbSprite => {
+            const fb = fbSprite.fireballRef;
+            if (fb) {
+                fb.sprite.setVelocity(0, 0);
+                fb.sprite.anims?.pause();
+            }
+        });
+
+        // Cambiar sprite del jugador
+        this.player.sprite.play('small-die');
+        this.player.sprite.setDepth(1000); // Z-index máximo
 
         if (withAnimation) {
             console.log('Muerte por enemigo - con animación');
 
-            // Animación de muerte por enemigo
-            this.player.sprite.body.setVelocity(0, 0);
-            this.player.sprite.body.allowGravity = true;
-            this.player.sprite.setVelocityY(-300); // Salto hacia arriba
-            //sound:
-            this.audio.playDie();
+            // Pausa breve antes del salto
+            this.player.sprite.body.stop();
+            this.player.sprite.setVelocity(0, 0);
+            this.player.sprite.body.allowGravity = false;
+            this.player.sprite.body.checkCollision.none = true;
 
-            // Esperar a que termine la animación
-            this.time.delayedCall(1000, () => {
-                this.showGameOverScreen();
+            this.time.delayedCall(200, () => {
+                this.player.sprite.body.allowGravity = true;
+                this.player.sprite.setVelocityY(-400);
+                this.audio.playDie();
+
+                // Espera hasta que caiga y muestre la pantalla final
+                this.time.delayedCall(1000, () => {
+                    this.showGameOverScreen();
+                });
             });
         } else {
             console.log('Muerte por caída - inmediata');
-            // Muerte inmediata
-            this.showGameOverScreen();
-            //sound:
             this.audio.playDie();
+            this.showGameOverScreen();
         }
     }
+
 
     showGameOverScreen() {
         this.pauseAll();

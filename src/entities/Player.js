@@ -44,6 +44,9 @@ export default class Player {
         anims.create({ key: 'fire-walk', frames: anims.generateFrameNumbers('mario-fire', {start: 1, end: 2}), frameRate: 8, repeat: -1 });
         anims.create({ key: 'fire-jump', frames: [{ key: 'mario-fire', frame: 5}], frameRate: 1});
 
+        // Mario dies
+        anims.create({ key: 'small-die', frames: [{ key: 'mario-small', frame: 6 }], frameRate: 1 });
+
         // GROW animation
         anims.create({
             key: 'transform-grow',

@@ -84,8 +84,8 @@ export default class Enemy {
             });
         });
     } else {
-        this.scene.gameOver();
-        //this.scene.gameOver({withAnimation: true}); //Activar cuando esté hecha la animación de Game Over para Mario...
+        //this.scene.gameOver();
+        this.scene.gameOver({withAnimation: true}); //Activar cuando esté hecha la animación de Game Over para Mario...
     }
 }
 
