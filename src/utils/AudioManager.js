@@ -51,6 +51,18 @@ export default class AudioManager {
             config: { volume: 0.4, rate: 1.0 }
         })
 
+        //bump sound
+        this.sounds.set('bump', {
+            key: 'bump-sound',
+            config: { volume: 0.6, rate: 1.0 }
+        })
+
+        //break sound
+        this.sounds.set('break', {
+            key: 'break-sound',
+            config: { volume: 0.4, rate: 1.0 }
+        })
+
         //coin sound
         this.sounds.set('coin', {
             key: 'coin-sound',
@@ -93,6 +105,8 @@ export default class AudioManager {
     playPowerDown(){ return this.play('powerdown') };
     playStomp(){ return this.play('stomp') };
     playPipe(){ return this.play('pipe') };
+    playBump(){ return this.play('bump') };
+    playBreak(){ return this.play('break') };
     playCoin(){ return this.play('coin') };
     playFireball(){ return this.play('fireball') };
 

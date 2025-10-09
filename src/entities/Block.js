@@ -23,6 +23,11 @@ export default class Block {
         if(this.isAnimating || this.used) return;
         this.isAnimating = true;
 
+        if(this.type === 'brick'){
+          //sound:
+            this.scene.audio.playBump();
+        }
+
         AnimationHelper.bump(this.scene, this.sprite, {
           offsetY: 8,
           duration: 100,
@@ -202,6 +207,9 @@ export default class Block {
         pieces[1].setVelocity(100, -200);  // arriba-derecha
         pieces[2].setVelocity(-50, -150);  // abajo-izquierda
         pieces[3].setVelocity(50, -150);   // abajo-derecha
+
+        //sound:
+        this.scene.audio.playBreak();
       
         // Destruir pedazos después de 1.5 segundos
         this.scene.time.delayedCall(1500, () => {
