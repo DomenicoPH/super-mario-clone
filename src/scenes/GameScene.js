@@ -39,7 +39,8 @@ class GameScene extends Phaser.Scene {
         this.enemies.getChildren().forEach(e => e.enemyRef.update());
         this.fireballs?.getChildren().forEach( f => f.fireballRef?.update());
         this.handleEnemySpawning();
-        this.cameras.main.scrollY = 0;
+        this.cameras.main.scrollY = 0; //fija la camara en Y
+        this.checkPlayerFell();
     }
 
     /* --- Custom functions --- */
@@ -218,10 +219,45 @@ class GameScene extends Phaser.Scene {
         this.physics.add.collider(this.fireballs, this.blocksGroup);
     }
 
-    gameOver(){
+    checkPlayerFell(){
+        if(this.isGameOver) return;
+        
+        // Usar un valor fijo más alto para testing
+        const deathThreshold = 400; // Valor alto temporal
+        
+        if(this.player.sprite.y > deathThreshold){
+            console.log('Muerte por caída detectada');
+            this.gameOver();
+        }
+    }
+
+    gameOver(options = {}) {
         if(this.isGameOver) return;
         this.isGameOver = true;
 
+        // Opciones por defecto
+        const { withAnimation = false } = options;
+
+        if (withAnimation) {
+            console.log('Muerte por enemigo - con animación');
+
+            // Animación de muerte por enemigo
+            this.player.sprite.body.setVelocity(0, 0);
+            this.player.sprite.body.allowGravity = true;
+            this.player.sprite.setVelocityY(-300); // Salto hacia arriba
+
+            // Esperar a que termine la animación
+            this.time.delayedCall(1000, () => {
+                this.showGameOverScreen();
+            });
+        } else {
+            console.log('Muerte por caída - inmediata');
+            // Muerte inmediata
+            this.showGameOverScreen();
+        }
+    }
+
+    showGameOverScreen() {
         this.pauseAll();
 
         const { width, height } = this.sys.game.canvas;

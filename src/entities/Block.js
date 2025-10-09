@@ -126,6 +126,7 @@ export default class Block {
 
       AnimationHelper.mushroomRise(this.scene, mushroom, {
         onComplete: () => {
+          if(!mushroom?.body) return;
           mushroom.body.allowGravity = true;
           mushroom.setImmovable(false);
           mushroom.setBounce(1, 0);
