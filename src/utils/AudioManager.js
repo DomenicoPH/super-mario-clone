@@ -75,6 +75,12 @@ export default class AudioManager {
             config: { volume: 0.4, rate: 1.0 }
         });
 
+        //Mario dies sound
+        this.sounds.set('die', {
+            key: 'die-sound',
+            config: { volume: 0.4, rate: 1.0 }
+        });
+
         // Instancias:
         this.sounds.forEach((soundData, name) => {
             soundData.instance = this.scene.sound.add(soundData.key, soundData.config);
@@ -109,5 +115,7 @@ export default class AudioManager {
     playBreak(){ return this.play('break') };
     playCoin(){ return this.play('coin') };
     playFireball(){ return this.play('fireball') };
+
+    playDie(){ return this.play('die') };
 
 }

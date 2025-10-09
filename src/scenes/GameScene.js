@@ -245,6 +245,8 @@ class GameScene extends Phaser.Scene {
             this.player.sprite.body.setVelocity(0, 0);
             this.player.sprite.body.allowGravity = true;
             this.player.sprite.setVelocityY(-300); // Salto hacia arriba
+            //sound:
+            this.audio.playDie();
 
             // Esperar a que termine la animación
             this.time.delayedCall(1000, () => {
@@ -254,6 +256,8 @@ class GameScene extends Phaser.Scene {
             console.log('Muerte por caída - inmediata');
             // Muerte inmediata
             this.showGameOverScreen();
+            //sound:
+            this.audio.playDie();
         }
     }
 
@@ -268,7 +272,7 @@ class GameScene extends Phaser.Scene {
             fontStyle: 'bold'
         }).setOrigin(0.5).setScrollFactor(0);
 
-        this.time.delayedCall(2000, () => {
+        this.time.delayedCall(3000, () => {
             this.scene.restart();
         });
     }

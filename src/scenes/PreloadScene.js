@@ -42,6 +42,8 @@ class PreloadScene extends Phaser.Scene {
         this.load.audio('break-sound', '/assets/sound/smb_breakblock.wav');
         this.load.audio('coin-sound', '/assets/sound/smb_coin.wav');
         this.load.audio('fireball-sound', '/assets/sound/smb_fireball.wav');
+
+        this.load.audio('die-sound', '/assets/sound/smb_mariodie.wav');
     }
 
     create(){
