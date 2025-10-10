@@ -172,6 +172,8 @@ class GameScene extends Phaser.Scene {
         const player = this.player;
         
         if (!enemy || !enemy.alive) return;
+
+        const isKoopa = enemy.constructor.name === 'Koopa';
         
         // Calcular dirección de la colisión
         const playerBottom = playerSprite.body.bottom;
@@ -185,7 +187,12 @@ class GameScene extends Phaser.Scene {
         } 
         // Si no es stomp y el jugador no ignora colisiones laterales
         else if (!player.ignoreEnemySide) {
-            enemy.hitPlayer(player);
+            if(isKoopa && ['SHELL_STATIONARY', 'REVIVE_WARNING'].includes(enemy.state)){
+                const dir = playerSprite.x < enemySprite.x ? 1 : -1;
+                enemy.kick(dir);
+            } else {
+                enemy.hitPlayer(player);
+            }
         }
         // Si ignoreEnemySide es true, NO HACER NADA - permitir superposición
     }

@@ -151,7 +151,7 @@ export default class Koopa extends StatefulEnemy {
   kick(direction) {
     this.clearTimers();
     this.setState(STATE.SHELL_MOVING, () => {
-      const speed = 220;
+      const speed = 300;
       this.directionFactor = direction;
       this.sprite.setVelocityX(speed * direction);
       this.sprite.play('koopa-shell');
