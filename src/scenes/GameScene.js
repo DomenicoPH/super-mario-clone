@@ -2,6 +2,7 @@ import Phaser from "phaser";
 import Player from "../entities/Player";
 import Block from "../entities/Block";
 import Goomba from "../enemies/Goomba";
+import Koopa from "../enemies/Koopa";
 import { createAnimations } from "../utils/createAnimations";
 import AudioManager from "../utils/AudioManager";
 import { createGridOverlay } from "../debug/gridOverlay";
@@ -200,6 +201,9 @@ class GameScene extends Phaser.Scene {
                 let enemy;
                 if(data.type === 'goomba'){
                     enemy = new Goomba(this, data.x, data.y);
+                }
+                else if(data.type === 'koopa'){
+                    enemy = new Koopa(this, data.x, data.y);
                 }
 
                 if(enemy){
