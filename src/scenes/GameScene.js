@@ -2,7 +2,7 @@ import Phaser from "phaser";
 import Player from "../entities/Player";
 import Block from "../entities/Block";
 import Goomba from "../enemies/Goomba";
-import Koopa from "../enemies/Koopa";
+import Koopa, {STATE as KOOPA_STATE} from "../enemies/Koopa";
 import { createAnimations } from "../utils/createAnimations";
 import AudioManager from "../utils/AudioManager";
 import { createGridOverlay } from "../debug/gridOverlay";
@@ -119,6 +119,26 @@ class GameScene extends Phaser.Scene {
             const eB = enemyB.enemyRef;
                 
             if (!eA?.alive || !eB?.alive) return;
+
+            if(eA.state === KOOPA_STATE.SHELL_MOVING && eB.alive){
+                eB.hitByShell(eA);
+                enemyA.body.checkCollision.none = false;
+                enemyB.body.checkCollision.none = true;
+
+                this.time.delayedCall(50, () => {
+                    enemyB.body.checkCollision.none = false;
+                });
+                return; // no hacer rebote normal
+            } 
+            if(eB.state === KOOPA_STATE.SHELL_MOVING && eA.alive){
+                eA.hitByShell(eB);
+                enemyB.body.checkCollision.none = false;
+                enemyA.body.checkCollision.none = true;
+                this.time.delayedCall(50, () => {
+                    enemyA.body.checkCollision.none = false;
+                });
+                return; // no hacer rebote normal
+            }
                 
             // Determinar quién está a la izquierda
             if (enemyA.x < enemyB.x) {

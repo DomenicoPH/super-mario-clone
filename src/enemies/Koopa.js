@@ -1,6 +1,6 @@
 import StatefulEnemy from "../entities/StatefulEnemy";
 
-const STATE = {
+export const STATE = {
   WALK: 'WALK',
   SHELL_STATIONARY: 'SHELL_STATIONARY',
   SHELL_MOVING: 'SHELL_MOVING',

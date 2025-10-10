@@ -47,6 +47,38 @@ export default class Enemy {
         this.scene.time.delayedCall(500, () => this.sprite.destroy());
     }
 
+    hitByShell(shellEnemy) {
+        if (!this.alive) return;
+        this.alive = false;
+        
+        // Detener movimiento horizontal
+        this.sprite.setVelocityX(0);
+        
+        // Empujar al enemigo hacia arriba y lateralmente según dirección del shell
+        const direction = shellEnemy.sprite.x < this.sprite.x ? 1 : -1;
+        this.sprite.setVelocity(200 * direction, -200); // lateral + vertical
+        this.sprite.body.allowGravity = true;
+        
+        // Desactivar colisión con otros enemigos y Mario
+        this.sprite.body.checkCollision.none = true;
+        
+        // Rotación mientras cae
+        this.scene.tweens.add({
+            targets: this.sprite,
+            angle: 360 * 2, // 2 giros completos
+            duration: 1000,
+            ease: 'Linear'
+        });
+    
+        // Sonido de aplastamiento
+        this.scene.audio.playStomp();
+    
+        // Destruir después de 1 segundo
+        this.scene.time.delayedCall(1000, () => {
+            this.sprite.destroy();
+        });
+    }
+
     hitPlayer(player) {
     if (!this.alive) return;
     if (player.invulnerable) return;
