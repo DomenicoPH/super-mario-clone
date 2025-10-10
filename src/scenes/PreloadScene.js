@@ -26,9 +26,10 @@ class PreloadScene extends Phaser.Scene {
 
         this.load.spritesheet('coin', '/assets/sprites/coin-spin.png', {frameWidth: 8, frameHeight: 16});
         this.load.image('mushroom', '/assets/sprites/mushroom-grow.png');
-        this.load.spritesheet('flower', '/assets/sprites/fire-flower.png', { frameWidth:16, frameHeight:16 });
+        this.load.spritesheet('flower', '/assets/sprites/fire-flower.png', { frameWidth: 16, frameHeight: 16 });
 
-        this.load.spritesheet('goomba', '/assets/sprites/goomba-normal.png', { frameWidth:16, frameHeight:16 });
+        this.load.spritesheet('goomba', '/assets/sprites/goomba-normal.png', { frameWidth: 16, frameHeight: 16 });
+        this.load.spritesheet('koopa', '/assets/sprites/koopa-normal.png', { frameWidth: 16, frameHeight: 24 });
 
         //SOUND
         this.load.audio('jump-small-sound', '/assets/sound/smb_jump-small.wav');
