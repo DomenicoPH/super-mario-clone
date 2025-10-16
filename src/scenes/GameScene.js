@@ -110,8 +110,20 @@ class GameScene extends Phaser.Scene {
         });
 
         // Colisiones con entorno
-        this.physics.add.collider(this.enemies, this.groundLayer);
-        this.physics.add.collider(this.enemies, this.blocksGroup);
+        const handleShellBounce = (enemySprite) => {
+          const e = enemySprite.enemyRef;
+          if (!e || e.type !== 'koopa' || e.state !== KOOPA_STATE.SHELL_MOVING) return;
+
+          const { body } = e.sprite;
+          if ((e.directionFactor > 0 && body.blocked.right) || (e.directionFactor < 0 && body.blocked.left)) {
+            e.directionFactor *= -1;
+            e.sprite.setVelocityX(e.shellSpeed * e.directionFactor);
+            e.sprite.x += e.directionFactor * 4; // pequeño empujón para evitar rebote infinito
+          }
+        };
+
+        this.physics.add.collider(this.enemies, this.groundLayer, handleShellBounce);
+        this.physics.add.collider(this.enemies, this.blocksGroup, handleShellBounce);
 
         // Colisión con otros enemigos
         this.physics.add.collider(this.enemies, this.enemies, (enemyA, enemyB) => {

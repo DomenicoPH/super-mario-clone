@@ -63,25 +63,34 @@ export default class Enemy {
         this.sprite.setVelocity(200 * direction, -200); // lateral + vertical
         this.sprite.body.allowGravity = true;
         
-        // Desactivar colisión con otros enemigos y Mario
-        this.sprite.body.checkCollision.none = true;
-        
-        // Rotación mientras cae
+        // IMPORTANTE: no desactivar el body aquí mismo (rompería el impulso).
+        // En su lugar, desactivamos las colisiones después de un pequeño delay
+        // para que la física aplique el salto y la animación.
+        this.scene.time.delayedCall(60, () => {
+          if (this.sprite && this.sprite.body) {
+            this.sprite.body.checkCollision.none = true;   // deja de colisionar con todo
+            this.sprite.setCollideWorldBounds(false);      // no chocar con límites
+            // mantener enable = true para que la gravedad siga actuando
+          }
+        });
+
+        // Rotación mientras cae (mantén exactamente lo que tenías)
         this.scene.tweens.add({
             targets: this.sprite,
             angle: 360 * 2, // 2 giros completos
             duration: 1000,
             ease: 'Linear'
         });
-    
-        // Sonido de aplastamiento
+
+        // Sonido de golpe
         this.scene.audio.playStomp();
-    
+
         // Destruir después de 1 segundo
         this.scene.time.delayedCall(1000, () => {
             this.sprite.destroy();
         });
     }
+
 
     hitPlayer(player) {
     if (!this.alive) return;
