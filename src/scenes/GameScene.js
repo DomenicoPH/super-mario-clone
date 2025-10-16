@@ -193,7 +193,7 @@ class GameScene extends Phaser.Scene {
         
         if (!enemy || !enemy.alive) return;
 
-        const isKoopa = enemy.constructor.name === 'Koopa';
+        const isKoopa = enemy.type === 'koopa' || enemy.isKoopa;
         
         // Calcular dirección de la colisión
         const playerBottom = playerSprite.body.bottom;
@@ -236,10 +236,9 @@ class GameScene extends Phaser.Scene {
 
                 let enemy;
                 if(data.type === 'goomba'){
-                    enemy = new Goomba(this, data.x, data.y);
-                }
-                else if(data.type === 'koopa'){
-                    enemy = new Koopa(this, data.x, data.y);
+                    enemy = new Goomba(this, data.x, data.y, {type: 'goomba'});
+                } else if(data.type === 'koopa'){
+                    enemy = new Koopa(this, data.x, data.y, {type: 'koopa'});
                 }
 
                 if(enemy){

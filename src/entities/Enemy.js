@@ -2,8 +2,12 @@ import Phaser from "phaser";
 import Player from "./Player";
 
 export default class Enemy {
-    constructor(scene, x, y, spriteKey = 'goomba'){
+    constructor(scene, x, y, spriteKey = 'goomba', props = {}){
         this.scene = scene;
+
+        this.type = props.type || spriteKey || 'enemy';
+        this.isGoomba = this.type === 'goomba';
+        this.isKoopa = this.type === 'koopa';
 
         this.sprite = scene.physics.add.sprite(x, y, spriteKey);
         this.sprite.setCollideWorldBounds(true);
