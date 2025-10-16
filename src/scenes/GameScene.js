@@ -199,6 +199,15 @@ class GameScene extends Phaser.Scene {
         const playerBottom = playerSprite.body.bottom;
         const enemyTop = enemySprite.body.top;
         const verticalOverlap = playerBottom - enemyTop;
+
+        console.log('COLLIDE', {
+          playerYvel: playerSprite.body.velocity.y,
+          playerBottom: playerSprite.body.bottom,
+          enemyTop: enemySprite.body.top,
+          verticalOverlap,
+          enemyState: enemy.state,
+          isKoopa
+        });
         
         // Si el jugador está cayendo y se superpone significativamente por arriba -> STOMP
         if (playerSprite.body.velocity.y > 0 && verticalOverlap > 0 && verticalOverlap < 10) {
