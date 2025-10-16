@@ -11,6 +11,8 @@ export default class Koopa extends StatefulEnemy {
   constructor(scene, x, y, props = {}) {
     super(scene, x, y, 'koopa');
 
+    this.shellSpeed = 300
+
     // === Animaciones ===
     if (!scene.anims.exists('koopa-walk')) {
       scene.anims.create({
@@ -69,7 +71,7 @@ export default class Koopa extends StatefulEnemy {
         break;
 
       case STATE.SHELL_MOVING:
-        // lógica de movimiento del caparazón si es necesario
+        this.sprite.setVelocityX(this.shellSpeed * (this.directionFactor || Math.sign(this.sprite.body.velocity.x) || 1));
         break;
 
       case STATE.REVIVE_WARNING:
@@ -151,9 +153,8 @@ export default class Koopa extends StatefulEnemy {
   kick(direction) {
     this.clearTimers();
     this.setState(STATE.SHELL_MOVING, () => {
-      const speed = 300;
       this.directionFactor = direction;
-      this.sprite.setVelocityX(speed * direction);
+      this.sprite.setVelocityX(this.shellSpeed * direction);
       this.sprite.play('koopa-shell');
       this.sprite.flipX = direction > 0;
     });
