@@ -51,44 +51,37 @@ export default class Enemy {
         this.scene.time.delayedCall(500, () => this.sprite.destroy());
     }
 
-    hitByShell(shellEnemy) {
+    dieWithFlip(direction = 1) {
         if (!this.alive) return;
         this.alive = false;
-        
-        // Detener movimiento horizontal
-        this.sprite.setVelocityX(0);
-        
-        // Empujar al enemigo hacia arriba y lateralmente según dirección del shell
-        const direction = shellEnemy.sprite.x < this.sprite.x ? 1 : -1;
-        this.sprite.setVelocity(200 * direction, -200); // lateral + vertical
+
+        // Dar impulso y voltear sprite
+        this.sprite.setFlipY(true);
+        this.sprite.setVelocity(200 * direction, -200);
         this.sprite.body.allowGravity = true;
-        
-        // IMPORTANTE: no desactivar el body aquí mismo (rompería el impulso).
-        // En su lugar, desactivamos las colisiones después de un pequeño delay
-        // para que la física aplique el salto y la animación.
+
+        // Pequeño delay antes de desactivar colisiones
         this.scene.time.delayedCall(60, () => {
-          if (this.sprite && this.sprite.body) {
-            this.sprite.body.checkCollision.none = true;   // deja de colisionar con todo
-            this.sprite.setCollideWorldBounds(false);      // no chocar con límites
-            // mantener enable = true para que la gravedad siga actuando
-          }
+            if (this.sprite && this.sprite.body) {
+                this.sprite.body.checkCollision.none = true;
+                this.sprite.setCollideWorldBounds(false);
+            }
         });
 
-        // Rotación mientras cae (mantén exactamente lo que tenías)
-        this.scene.tweens.add({
-            targets: this.sprite,
-            angle: 360 * 2, // 2 giros completos
-            duration: 1000,
-            ease: 'Linear'
-        });
-
-        // Sonido de golpe
+        // Sonido clásico de golpe
         this.scene.audio.playStomp();
 
         // Destruir después de 1 segundo
         this.scene.time.delayedCall(1000, () => {
             this.sprite.destroy();
         });
+    }
+
+    hitByShell(shellEnemy) {
+        if (!this.alive) return;
+
+        const direction = shellEnemy.sprite.x < this.sprite.x ? 1 : -1;
+        this.dieWithFlip(direction);
     }
 
 
