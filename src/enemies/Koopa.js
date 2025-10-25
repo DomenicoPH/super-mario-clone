@@ -11,7 +11,9 @@ export default class Koopa extends StatefulEnemy {
   constructor(scene, x, y, props = {}) {
     super(scene, x, y, 'koopa');
 
-    this.shellSpeed = 300
+    this.shellSpeed = 250;
+    this.sprite.body.setSize(16, 16);
+    this.sprite.body.setOffset(0, 8);
 
     // === Animaciones ===
     if (!scene.anims.exists('koopa-walk')) {
@@ -99,7 +101,7 @@ export default class Koopa extends StatefulEnemy {
     const body = this.sprite.body;
     if(!body) return;
 
-    const normalHeight = 24;
+    const normalHeight = 16;
     const shellHeight = 14;
     const width = 16;
 
