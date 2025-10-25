@@ -122,8 +122,8 @@ class GameScene extends Phaser.Scene {
           }
         };
 
-        this.physics.add.collider(this.enemies, this.groundLayer, handleShellBounce);
-        this.physics.add.collider(this.enemies, this.blocksGroup, handleShellBounce);
+        this.enemyGroundCollider = this.physics.add.collider(this.enemies, this.groundLayer, handleShellBounce);
+        this.enemyBlockCollider = this.physics.add.collider(this.enemies, this.blocksGroup, handleShellBounce);
 
         // Colisión con otros enemigos
         this.physics.add.collider(this.enemies, this.enemies, (enemyA, enemyB) => {
@@ -204,6 +204,8 @@ class GameScene extends Phaser.Scene {
         const player = this.player;
         
         if (!enemy || !enemy.alive) return;
+
+        if (enemySprite.tempIgnorePlayer) return;
 
         const isKoopa = enemy.type === 'koopa' || enemy.isKoopa;
         

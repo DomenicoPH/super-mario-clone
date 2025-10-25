@@ -55,20 +55,20 @@ export default class Enemy {
         if (!this.alive) return;
         this.alive = false;
 
-        // Dar impulso y voltear sprite
-        this.sprite.setFlipY(true);
-        this.sprite.setVelocity(200 * direction, -200);
-        this.sprite.body.allowGravity = true;
-
         // Pequeño delay antes de desactivar colisiones
-        this.scene.time.delayedCall(60, () => {
+        this.scene.time.delayedCall(100, () => {
             if (this.sprite && this.sprite.body) {
                 this.sprite.body.checkCollision.none = true;
                 this.sprite.setCollideWorldBounds(false);
             }
         });
 
-        // Sonido clásico de golpe
+        // Dar impulso y voltear sprite
+        this.sprite.setFlipY(true);
+        this.sprite.setVelocity(200 * direction, -200);
+        this.sprite.body.allowGravity = true;
+
+        // Sonido
         this.scene.audio.playStomp();
 
         // Destruir después de 1 segundo
