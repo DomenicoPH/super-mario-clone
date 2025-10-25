@@ -138,8 +138,8 @@ export default class Block {
       this.scene.audio.playPowerUpAppears();
 
       //colisiones
-      this.scene.physics.add.collider(mushroom, this.scene.groundLayer);
-      this.scene.blocks.forEach( block => {
+      this.scene.physics.add.collider(mushroom, this.scene.mapManager.groundLayer);
+      this.scene.blockManager.blocks.forEach( block => {
         this.scene.physics.add.collider(mushroom, block.sprite);
       })
 

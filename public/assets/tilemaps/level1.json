@@ -365,24 +365,6 @@
                  "width":0,
                  "x":1728,
                  "y":208
-                }, 
-                {
-                 "height":0,
-                 "id":69,
-                 "name":"",
-                 "point":true,
-                 "properties":[
-                        {
-                         "name":"type",
-                         "type":"string",
-                         "value":"koopa"
-                        }],
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":0,
-                 "x":224,
-                 "y":208
                 }],
          "opacity":1,
          "type":"objectgroup",

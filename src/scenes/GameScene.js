@@ -6,6 +6,8 @@ import Koopa, {STATE as KOOPA_STATE} from "../enemies/Koopa";
 import { createAnimations } from "../utils/createAnimations";
 import AudioManager from "../utils/AudioManager";
 import { createGridOverlay } from "../debug/gridOverlay";
+import MapManager from "../managers/MapManager";
+import BlockManager from "../managers/BlockManager";
 
 class GameScene extends Phaser.Scene {
     constructor(){
@@ -16,8 +18,13 @@ class GameScene extends Phaser.Scene {
         this.isGameOver = false;
         createAnimations(this);
         this.createBackground();
-        this.createMap();
-        this.createBlocks();
+        
+        this.mapManager = new MapManager(this);
+        this.mapManager.createMap();
+
+        this.blockManager = new BlockManager(this, this.mapManager);
+        this.blockManager.createBlocks();
+
         this.createPlayer();
         this.createFireballs();
         this.createEnemies();
@@ -50,40 +57,12 @@ class GameScene extends Phaser.Scene {
         const sky = this.add.image(0, 0, 'sky').setOrigin(0).setScrollFactor(0).setDepth(-1); //cielo de fondo
     };
 
-    createMap(){
-        const map = this.make.tilemap({ key: 'level1' });
-        const tileset = map.addTilesetImage('world-tileset', 'world-tileset');
-
-        this.map = map;
-        this.tileset = tileset;
-
-        this.groundLayer = map.createLayer('ground', tileset); //suelo y superficies
-        this.groundLayer.setCollisionByProperty({ collides: true });
-
-        this.decorLayer = map.createLayer('decoration', tileset);
-    };
-
-    createBlocks(){
-        //const blockTilesLayer = map.createLayer('blockTiles', tileset); //bloques interactivos desde tiled (solo ref.)
-        const blockObjects = this.map.getObjectLayer('blocks').objects;
-        this.blocks = [];
-
-        blockObjects.forEach(obj => {
-            const props = Object.fromEntries(obj.properties.map(p => [p.name,p.value]));
-            const type = props.type || obj.type || 'question';
-            const content = props.content || null;
-
-            const block = new Block(this, obj.x, obj.y, type, content);
-            this.blocks.push(block);
-        })
-    };
-
     createPlayer(){
         this.player = new Player(this, 48, 200);
-        this.physics.add.collider(this.player.sprite, this.groundLayer);
+        this.physics.add.collider(this.player.sprite, this.mapManager.groundLayer);
 
-        this.blocksGroup = this.physics.add.staticGroup();
-        this.blocks.forEach(block => {
+        this.blocksGroup = this.blockManager.blocksGroup;
+        this.blockManager.blocks.forEach(block => {
             block.sprite.blockRef = block;
             this.blocksGroup.add(block.sprite);
         });
@@ -97,7 +76,7 @@ class GameScene extends Phaser.Scene {
         this.enemySpawnData = [];
 
         // Leer todos los objetos desde la capa "enemies"
-        const enemyObjects = this.map.getObjectLayer('enemies')?.objects || [];
+        const enemyObjects = this.mapManager.map.getObjectLayer('enemies')?.objects || [];
 
         enemyObjects.forEach(obj => {
             const type = obj.type || (obj.properties?.find(p => p.name === 'type')?.value);
@@ -122,7 +101,7 @@ class GameScene extends Phaser.Scene {
           }
         };
 
-        this.physics.add.collider(this.enemies, this.groundLayer, handleShellBounce);
+        this.physics.add.collider(this.enemies, this.mapManager.groundLayer, handleShellBounce);
         this.physics.add.collider(this.enemies, this.blocksGroup, handleShellBounce);
 
         // Colisión con otros enemigos
@@ -257,10 +236,10 @@ class GameScene extends Phaser.Scene {
         this.fireballs = this.physics.add.group();
 
         // 1. Collider con el suelo
-        this.physics.add.collider(this.fireballs, this.groundLayer);
+        this.physics.add.collider(this.fireballs, this.mapManager.groundLayer);
 
         // 2. Collider con los bloques
-        this.physics.add.collider(this.fireballs, this.blocksGroup);
+        this.physics.add.collider(this.fireballs, this.blockManager.blocksGroup);
     }
 
     checkPlayerFell(){
@@ -368,11 +347,11 @@ class GameScene extends Phaser.Scene {
 
     setupWorldBounds(){
         const worldBounds = [true, true, false, true]
-        this.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels, ...worldBounds);
+        this.physics.world.setBounds(0, 0, this.mapManager.map.widthInPixels, this.mapManager.map.heightInPixels, ...worldBounds);
     }
 
     setupCamera(){
-        this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
+        this.cameras.main.setBounds(0, 0, this.mapManager.map.widthInPixels, this.mapManager.map.heightInPixels);
         this.cameras.main.scrollY = 0;
         this.cameras.main.startFollow(this.player.sprite, false, 1, 0);
     };
