@@ -65,7 +65,7 @@ export default class Enemy {
 
         // Dar impulso y voltear sprite
         this.sprite.setFlipY(true);
-        this.sprite.setVelocity(200 * direction, -200);
+        this.sprite.setVelocity(25 * direction, -250);
         this.sprite.body.allowGravity = true;
 
         // Sonido

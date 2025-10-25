@@ -122,8 +122,8 @@ class GameScene extends Phaser.Scene {
           }
         };
 
-        this.enemyGroundCollider = this.physics.add.collider(this.enemies, this.groundLayer, handleShellBounce);
-        this.enemyBlockCollider = this.physics.add.collider(this.enemies, this.blocksGroup, handleShellBounce);
+        this.physics.add.collider(this.enemies, this.groundLayer, handleShellBounce);
+        this.physics.add.collider(this.enemies, this.blocksGroup, handleShellBounce);
 
         // Colisión con otros enemigos
         this.physics.add.collider(this.enemies, this.enemies, (enemyA, enemyB) => {
@@ -217,7 +217,7 @@ class GameScene extends Phaser.Scene {
         // Si el jugador está cayendo y se superpone significativamente por arriba -> STOMP
         if (playerSprite.body.velocity.y > 0 && verticalOverlap > 0 && verticalOverlap < 10) {
             enemy.stomped();
-            playerSprite.setVelocityY(-200);
+            playerSprite.setVelocityY(-250);
         } 
         // Si no es stomp y el jugador no ignora colisiones laterales
         else if (!player.ignoreEnemySide) {
