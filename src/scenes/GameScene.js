@@ -6,6 +6,7 @@ import AudioManager from "../utils/AudioManager";
 import MapManager from "../managers/MapManager";
 import BlockManager from "../managers/BlockManager";
 import EnemyManager from "../managers/EnemyManager";
+import PlayerManager from "../managers/PlayerManager";
 
 class GameScene extends Phaser.Scene {
     constructor(){
@@ -23,7 +24,10 @@ class GameScene extends Phaser.Scene {
         this.blockManager = new BlockManager(this, this.mapManager);
         this.blockManager.createBlocks();
 
-        this.createPlayer();
+        this.playerManager = new PlayerManager(this, this.mapManager, this.blockManager);
+        this.playerManager.createPlayer();
+        this.player = this.playerManager.getPlayer();
+
         this.createFireballs();
         
         this.enemyManager = new EnemyManager(this, this.mapManager, this.blockManager, this.player, this.fireballs);
@@ -59,22 +63,6 @@ class GameScene extends Phaser.Scene {
     createBackground(){
         const sky = this.add.image(0, 0, 'sky').setOrigin(0).setScrollFactor(0).setDepth(-1); //cielo de fondo
     };
-
-    createPlayer(){
-        this.player = new Player(this, 48, 200);
-        this.physics.add.collider(this.player.sprite, this.mapManager.groundLayer);
-
-        this.blocksGroup = this.blockManager.blocksGroup;
-        this.blockManager.blocks.forEach(block => {
-            block.sprite.blockRef = block;
-            this.blocksGroup.add(block.sprite);
-        });
-        this.physics.add.collider(this.player.sprite, this.blocksGroup, (player, blockSprite) => {
-            blockSprite.blockRef.handleCollision(player, blockSprite);
-    }   );
-    };
-
-    
 
     createFireballs() {
         this.fireballs = this.physics.add.group();

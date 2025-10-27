@@ -13,3 +13,10 @@ En proyectos grandes, podrías separar el registro de colisiones en un método s
 
 3. Optimización de spawns
 Si más adelante el mapa es muy largo, podrías borrar (destroy()) enemigos fuera de cámara y marcarlos como “despawned” para optimizar memoria, todo dentro del manager.
+
+# Modularización por responsabilidad en GameScene
+pendientes:
+- PlayerManager
+- FireballManager
+- CameraManager
+- UIManager -> showGameOverScreen() y PauseAll()
