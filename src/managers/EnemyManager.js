@@ -188,4 +188,12 @@ export default class EnemyManager {
         this.enemies.getChildren().forEach(e => e.enemyRef.update());
     }
 
+    getEnemies(){
+        return this.enemies;
+    }
+
+    getEnemySpawnData(){
+        return this.enemySpawnData;
+    }
+
 };

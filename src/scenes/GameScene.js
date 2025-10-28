@@ -32,8 +32,8 @@ class GameScene extends Phaser.Scene {
         
         this.enemyManager = new EnemyManager(this, this.mapManager, this.blockManager, this.player, this.fireballs);
         this.enemyManager.createEnemies();
-        this.enemies = this.enemyManager.enemies;
-        this.enemySpawnData = this.enemyManager.enemySpawnData;
+        this.enemies = this.enemyManager.getEnemies();
+        this.enemySpawnData = this.enemyManager.getEnemySpawnData();
         
         this.setupWorldBounds();
         this.setupCamera();   
