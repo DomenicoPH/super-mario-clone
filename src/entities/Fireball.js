@@ -33,7 +33,7 @@ export default class Fireball {
 
     // Rebote en el suelo (si cae sobre algo)
     if (this.sprite.body.blocked.down) {
-      this.sprite.setVelocityY(-160);
+      this.sprite.setVelocityY(-200);
     }
 
     // Si choca por arriba o por los lados -> explotar
