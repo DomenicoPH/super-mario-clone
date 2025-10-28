@@ -84,6 +84,13 @@ export default class Enemy {
         this.dieWithFlip(direction);
     }
 
+    hitByFireball(fireball){
+        if(!this.alive) return;
+
+        const direction = fireball.sprite.x < this.sprite.x ? 1 : -1;
+        this.dieWithFlip(direction);
+        fireball.explodeAndDestroy();
+    }
 
     hitPlayer(player) {
     if (!this.alive) return;

@@ -122,9 +122,8 @@ export default class EnemyManager {
         this.physics.add.overlap(this.fireballs, this.enemies, (fbSprite, enemySprite) => {
             const fb = fbSprite.fireballRef;
             const enemy = enemySprite.enemyRef;
-
-            enemy?.stomped?.();
-            fb?.explodeAndDestroy?.();
+            if(!enemy || !fb) return;
+            enemy.hitByFireball(fb);                
         });
     }
 
