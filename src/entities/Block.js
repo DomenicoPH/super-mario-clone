@@ -156,7 +156,9 @@ export default class Block {
       const spawnX = this.sprite.x + this.sprite.width / 2;
       const spawnY = this.sprite.y;
 
-      const flower = this.scene.physics.add.staticSprite(spawnX, spawnY, 'flower');
+      const flower = this.scene.physics.add.sprite(spawnX, spawnY, 'flower');
+      flower.setImmovable(true);
+      flower.body.allowGravity = false;
       flower.setOrigin(0.5, 0);
       flower.play('flower-idle');
 
