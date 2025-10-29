@@ -171,6 +171,11 @@ export default class Koopa extends StatefulEnemy {
     this.enterShell();
   }
 
+  onFireballHit(){
+    this.sprite.play('koopa-shell');
+    this.adjustBodySize(STATE.SHELL_STATIONARY);
+  }
+
   revive() {
     this.clearTimers();
     this.setState(STATE.WALK, () => {

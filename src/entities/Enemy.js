@@ -88,6 +88,11 @@ export default class Enemy {
         if(!this.alive) return;
 
         const direction = fireball.sprite.x < this.sprite.x ? 1 : -1;
+
+        if(this.isKoopa && typeof this.onFireballHit === 'function'){
+            this.onFireballHit();
+        }
+
         this.dieWithFlip(direction);
         fireball.explodeAndDestroy();
     }
