@@ -93,6 +93,7 @@ export default class Enemy {
             this.onFireballHit();
         }
 
+        this.onFireballHit?.();
         this.dieWithFlip(direction);
         fireball.explodeAndDestroy();
     }

@@ -14,4 +14,11 @@ export default class Goomba extends Enemy {
 
         this.sprite.play('goomba-walk');
     }
+
+    onFireballHit(){
+        if(this.sprite.anims){
+            this.sprite.anims.stop();
+        }
+        this.sprite.setFrame(1);
+    }
 }
