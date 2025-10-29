@@ -4,7 +4,7 @@ export default class Fireball {
   constructor(scene, x, y, dir = 1) {
     this.scene = scene;
     this.dir = dir;
-    this.speed = 220;
+    this.speed = 250;
     this._isExploding = false;
 
     // crear sprite físico
