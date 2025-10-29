@@ -56,7 +56,7 @@ export default class Enemy {
         this.alive = false;
 
         // Pequeño delay antes de desactivar colisiones
-        this.scene.time.delayedCall(100, () => {
+        this.scene.time.delayedCall(50, () => {
             if (this.sprite && this.sprite.body) {
                 this.sprite.body.checkCollision.none = true;
                 this.sprite.setCollideWorldBounds(false);
@@ -65,7 +65,7 @@ export default class Enemy {
 
         // Dar impulso y voltear sprite
         this.sprite.setFlipY(true);
-        this.sprite.setVelocity(25 * direction, -250);
+        this.sprite.setVelocity(60 * direction, -200);
         this.sprite.body.allowGravity = true;
 
         // Sonido
