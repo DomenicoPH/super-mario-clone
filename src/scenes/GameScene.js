@@ -3,6 +3,7 @@ import Player from "../entities/Player";
 import { createAnimations } from "../utils/createAnimations";
 import { createGridOverlay } from "../debug/gridOverlay";
 import AudioManager from "../utils/AudioManager";
+import UIManager from "../managers/UIManager";
 import MapManager from "../managers/MapManager";
 import BlockManager from "../managers/BlockManager";
 import EnemyManager from "../managers/EnemyManager";
@@ -18,6 +19,9 @@ class GameScene extends Phaser.Scene {
         this.isGameOver = false;
         createAnimations(this);
         this.createBackground();
+
+        //UI
+        this.uiManager = new UIManager(this);
         
         //Map
         this.mapManager = new MapManager(this);
@@ -124,51 +128,14 @@ class GameScene extends Phaser.Scene {
 
                 // Espera hasta que caiga y muestre la pantalla final
                 this.time.delayedCall(1000, () => {
-                    this.showGameOverScreen();
+                    this.uiManager.showGameOverScreen();
                 });
             });
         } else {
             console.log('Muerte por caída - inmediata');
             this.audio.playDie();
-            this.showGameOverScreen();
+            this.uiManager.showGameOverScreen();
         }
-    }
-
-
-    showGameOverScreen() {
-        this.pauseAll();
-
-        const { width, height } = this.sys.game.canvas;
-        this.add.text(width / 2, height / 2, 'GAME OVER', {
-            fontSize: '10px',
-            color: '#fff',
-            fontFamily: 'Arial',
-            fontStyle: 'bold'
-        }).setOrigin(0.5).setScrollFactor(0);
-
-        this.time.delayedCall(3000, () => {
-            this.scene.restart();
-        });
-    }
-
-    pauseAll(){
-        this.player.sprite.anims.pause();
-
-        this.enemies.getChildren().forEach(enemySprite => {
-            enemySprite.enemyRef?.sprite?.anims.pause();
-            enemySprite.enemyRef.alive = false;
-        });
-
-        this.fireballs?.getChildren().forEach(fbSprite => {
-            fbSprite.fireballRef?.sprite?.anims.pause();
-        });
-
-        this.blocks?.forEach( block => {
-            block.sprite.anims?.pause();
-            block.isAnimating = false;
-        });
-
-        this.physics.world.pause();
     }
 
     setupWorldBounds(){
