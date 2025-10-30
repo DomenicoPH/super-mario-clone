@@ -60,19 +60,14 @@ class GameScene extends Phaser.Scene {
 
     update(){
         if(this.isGameOver) return;
-        
         this.player.update();
-        
         this.enemyManager.update();
-
         this.fireballs?.getChildren().forEach( f => f.fireballRef?.update());
         this.cameras.main.scrollY = 0; //fija la camara en Y
         this.playerManager.update(); //actualiza checkPlayerFell() desde PlayerManager
     }
 
     /* --- Custom functions --- */
-
-    
 
     gameOver(options = {}) {
         if (this.isGameOver) return;
