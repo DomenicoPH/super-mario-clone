@@ -26,8 +26,11 @@ export default class UIManager {
         player?.sprite?.anims?.pause();
 
         enemies?.getChildren().forEach(enemySprite => {
-            enemySprite.enemyRef?.sprite?.anims.pause();
-            enemySprite.enemyRef?.alive = false;
+            const e = enemySprite.enemyRef;
+            if (e) {
+                e.sprite?.anims?.pause();
+                e.alive = false;
+            }
         });
 
         fireballs?.getChildren().forEach(fbSprite => {

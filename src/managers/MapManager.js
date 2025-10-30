@@ -19,7 +19,7 @@ export default class MapManager {
     };
 
     createBackground(){
-        const sky = this.add
+        const sky = this.scene.add
             .image(0, 0, 'sky')
             .setOrigin(0)
             .setScrollFactor(0)

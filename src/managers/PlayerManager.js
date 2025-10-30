@@ -24,5 +24,23 @@ export default class PlayerManager {
 
     getPlayer() {
       return this.player;
+    };
+
+    update(){
+        if(!this.player || this.scene.isGameOver) return;
+        this.player.update();
+        this.checkPlayerFell();
     }
+
+    checkPlayerFell(){
+        if(this.scene.isGameOver) return;
+        
+        // Usar un valor fijo más alto para testing
+        const deathThreshold = 300; // distancia debajo del borde inferior de la camara
+        
+        if(this.player.sprite.y > deathThreshold){
+            console.log('Muerte por caída detectada');
+            this.scene.gameOver();
+        }
+    };
 }

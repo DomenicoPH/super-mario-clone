@@ -18,13 +18,13 @@ class GameScene extends Phaser.Scene {
     create(){
         this.isGameOver = false;
         createAnimations(this);
-        this.createBackground();
 
         //UI
         this.uiManager = new UIManager(this);
         
         //Map
         this.mapManager = new MapManager(this);
+        this.mapManager.createBackground();
         this.mapManager.createMap();
 
         //Blocks
@@ -67,22 +67,12 @@ class GameScene extends Phaser.Scene {
 
         this.fireballs?.getChildren().forEach( f => f.fireballRef?.update());
         this.cameras.main.scrollY = 0; //fija la camara en Y
-        this.checkPlayerFell();
+        this.playerManager.update(); //actualiza checkPlayerFell() desde PlayerManager
     }
 
     /* --- Custom functions --- */
 
-    checkPlayerFell(){
-        if(this.isGameOver) return;
-        
-        // Usar un valor fijo más alto para testing
-        const deathThreshold = 300; // distancia debajo del borde inferior de la camara
-        
-        if(this.player.sprite.y > deathThreshold){
-            console.log('Muerte por caída detectada');
-            this.gameOver();
-        }
-    }
+    
 
     gameOver(options = {}) {
         if (this.isGameOver) return;
