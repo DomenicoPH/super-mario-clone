@@ -195,4 +195,15 @@ export default class EnemyManager {
         return this.enemySpawnData;
     }
 
+    handleGameOver() {
+        this.enemies.getChildren().forEach(enemySprite => {
+            const e = enemySprite.enemyRef;
+            if (e) {
+                e.alive = false;
+                e.sprite.setVelocity(0, 0);
+                e.sprite.anims.pause();
+            }
+        });
+    }
+
 };

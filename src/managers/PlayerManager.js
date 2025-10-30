@@ -43,4 +43,33 @@ export default class PlayerManager {
             this.scene.gameOver();
         }
     };
+
+    handleGameOver(withAnimation) {
+        const player = this.player;
+        if (!player) return;
+        
+        player.sprite.play('small-die');
+        player.sprite.setDepth(1000);
+        
+        if (withAnimation) {
+            player.sprite.body.stop();
+            player.sprite.setVelocity(0, 0);
+            player.sprite.body.allowGravity = false;
+            player.sprite.body.checkCollision.none = true;
+        
+            this.scene.time.delayedCall(200, () => {
+                player.sprite.body.allowGravity = true;
+                player.sprite.setVelocityY(-400);
+                this.scene.audio.playDie();
+            
+                this.scene.time.delayedCall(1000, () => {
+                    this.scene.uiManager.showGameOverScreen();
+                });
+            });
+        } else {
+            this.scene.audio.playDie();
+            this.scene.uiManager.showGameOverScreen();
+        }
+    }
+
 }

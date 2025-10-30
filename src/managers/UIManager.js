@@ -44,4 +44,12 @@ export default class UIManager {
 
         physics?.world?.pause();
     }
+
+    handleGameOver(withAnimation) {
+        if (!withAnimation){
+            this.pauseAll();
+            this.showGameOverScreen();
+        }
+    }
+
 }

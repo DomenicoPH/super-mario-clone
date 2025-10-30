@@ -16,4 +16,15 @@ export default class FireballManager {
     getFireballs(){
         return this.fireballs;
     }
+
+    handleGameOver() {
+        this.fireballs?.getChildren().forEach(fbSprite => {
+            const fb = fbSprite.fireballRef;
+            if (fb) {
+                fb.sprite.setVelocity(0, 0);
+                fb.sprite.anims?.pause();
+            }
+        });
+    }
+
 }
