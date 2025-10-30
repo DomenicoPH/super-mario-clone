@@ -2,7 +2,7 @@ import Phaser from "phaser";
 import Player from "./Player";
 
 export default class Enemy {
-    constructor(scene, x, y, spriteKey = 'goomba', props = {}){
+    constructor(scene, x, y, spriteKey = 'goomba', props = {}) {
         this.scene = scene;
 
         this.type = props.type || spriteKey || 'enemy';
@@ -18,126 +18,134 @@ export default class Enemy {
         this.speed = 50;
     }
 
-    update(){
-        if(!this.alive) return;
+    update() {
+        if (!this.alive) return;
         this.sprite.setVelocityX(this.sprite.body.velocity.x > 0 ? this.speed : -this.speed);
 
-        // Si choca con un muro..
-        if(this.sprite.body.blocked.left){
+        if (this.sprite.body.blocked.left) {
             this.sprite.setVelocityX(this.speed);
             this.sprite.flipX = true;
-        } else if(this.sprite.body.blocked.right){
-            this.sprite.setVelocityX(-this.speed)
+        } else if (this.sprite.body.blocked.right) {
+            this.sprite.setVelocityX(-this.speed);
             this.sprite.flipX = false;
         }
     }
 
-    // custom methods
-    stomped(){
-        if(!this.alive) return;
+    stomped() {
+        if (!this.alive) return;
         this.alive = false;
 
-        //animación de aplastamiento
         this.sprite.setVelocity(0, 0);
         this.sprite.anims.stop();
         this.sprite.setFrame(2);
         this.sprite.disableBody(true, false);
-        //sound
         this.scene.audio.playStomp();
 
         this.sprite.body.setSize(this.sprite.body.width, this.sprite.body.height / 2);
         this.sprite.body.position.y += this.sprite.body.height / 2;
-        
+
         this.scene.time.delayedCall(500, () => this.sprite.destroy());
     }
 
-    dieWithFlip(direction = 1) {
+    // Muerte por shell
+    dieByShell(direction = 1) {
         if (!this.alive) return;
         this.alive = false;
 
-        // Pequeño delay antes de desactivar colisiones
-        this.scene.time.delayedCall(50, () => {
+        // Aplicar impulso inmediatamente
+        this.sprite.setFlipY(true);
+        this.sprite.setVelocity(60 * direction, -200);
+        this.sprite.body.allowGravity = true;
+        this.scene.audio.playStomp();
+
+        // Desactivar colisiones después de un breve delay para atravesar el suelo
+        this.scene.time.delayedCall(100, () => {
             if (this.sprite && this.sprite.body) {
                 this.sprite.body.checkCollision.none = true;
                 this.sprite.setCollideWorldBounds(false);
             }
         });
 
-        // Dar impulso y voltear sprite
+        this.scene.time.delayedCall(1000, () => {
+            if (this.sprite && this.sprite.destroy) this.sprite.destroy();
+        });
+    }
+
+    // Muerte por fireball
+    dieByFireball(direction = 1) {
+        if (!this.alive) return;
+        this.alive = false;
+
+        // Quitar colisiones de inmediato
+        if (this.sprite && this.sprite.body) {
+            this.sprite.body.checkCollision.none = true;
+            this.sprite.setCollideWorldBounds(false);
+        }
+
         this.sprite.setFlipY(true);
         this.sprite.setVelocity(60 * direction, -200);
         this.sprite.body.allowGravity = true;
-
-        // Sonido
         this.scene.audio.playStomp();
 
-        // Destruir después de 1 segundo
         this.scene.time.delayedCall(1000, () => {
-            this.sprite.destroy();
+            if (this.sprite && this.sprite.destroy) this.sprite.destroy();
         });
     }
 
     hitByShell(shellEnemy) {
         if (!this.alive) return;
-
         const direction = shellEnemy.sprite.x < this.sprite.x ? 1 : -1;
-        this.dieWithFlip(direction);
+        this.dieByShell(direction);
     }
 
-    hitByFireball(fireball){
-        if(!this.alive) return;
-
+    hitByFireball(fireball) {
+        if (!this.alive) return;
         const direction = fireball.sprite.x < this.sprite.x ? 1 : -1;
 
-        if(this.isKoopa && typeof this.onFireballHit === 'function'){
+        if (this.isKoopa && typeof this.onFireballHit === 'function') {
             this.onFireballHit();
         }
 
         this.onFireballHit?.();
-        this.dieWithFlip(direction);
+        this.dieByFireball(direction);
         fireball.explodeAndDestroy();
     }
 
     hitPlayer(player) {
-    if (!this.alive) return;
-    if (player.invulnerable) return;
+        if (!this.alive) return;
+        if (player.invulnerable) return;
 
-    if (player.size === 'big' || player.size === 'fire') {
-        player.invulnerable = true;
-        player.ignoreEnemySide = true; // Activar inmediatamente
+        if (player.size === 'big' || player.size === 'fire') {
+            player.invulnerable = true;
+            player.ignoreEnemySide = true;
 
-        // Pausar brevemente para la animación de encogimiento
-        this.scene.physics.world.pause();
-        player.sprite.setVelocity(0, 0);
-        this.sprite.setVelocity(0, 0);
-        //sound
-        this.scene.audio.playPowerDown();
+            this.scene.physics.world.pause();
+            player.sprite.setVelocity(0, 0);
+            this.sprite.setVelocity(0, 0);
+            this.scene.audio.playPowerDown();
 
-        player.shrink();
+            player.shrink();
 
-        this.scene.time.delayedCall(800, () => {
-            this.scene.physics.world.resume();
+            this.scene.time.delayedCall(800, () => {
+                this.scene.physics.world.resume();
 
-            // Efecto de parpadeo
-            player.sprite.setAlpha(0.5);
-            this.scene.tweens.add({
-                targets: player.sprite,
-                alpha: 0.2,
-                ease: 'Linear',
-                duration: 200,
-                repeat: 5,
-                yoyo: true,
-                onComplete: () => {
-                    player.sprite.setAlpha(1);
-                    player.ignoreEnemySide = false; // Reactivar colisiones laterales
-                    player.invulnerable = false;
-                }
+                player.sprite.setAlpha(0.5);
+                this.scene.tweens.add({
+                    targets: player.sprite,
+                    alpha: 0.2,
+                    ease: 'Linear',
+                    duration: 200,
+                    repeat: 5,
+                    yoyo: true,
+                    onComplete: () => {
+                        player.sprite.setAlpha(1);
+                        player.ignoreEnemySide = false;
+                        player.invulnerable = false;
+                    }
+                });
             });
-        });
-    } else {
-        //this.scene.gameOver();
-        this.scene.gameOver({withAnimation: true}); //Activar cuando esté hecha la animación de Game Over para Mario...
+        } else {
+            this.scene.gameOver({ withAnimation: true });
+        }
     }
-}
-
 }
