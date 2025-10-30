@@ -68,11 +68,6 @@ class GameScene extends Phaser.Scene {
 
     /* --- Custom functions --- */
 
-    createBackground(){
-        const sky = this.add.image(0, 0, 'sky').setOrigin(0).setScrollFactor(0).setDepth(-1); //cielo de fondo
-    };
-
-
     checkPlayerFell(){
         if(this.isGameOver) return;
         
