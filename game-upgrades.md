@@ -16,7 +16,5 @@ Si más adelante el mapa es muy largo, podrías borrar (destroy()) enemigos fuer
 
 # Modularización por responsabilidad en GameScene
 pendientes:
-- PlayerManager
-- FireballManager
 - CameraManager
 - UIManager -> showGameOverScreen() y PauseAll()
