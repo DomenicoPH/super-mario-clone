@@ -17,4 +17,12 @@ export default class MapManager {
 
         this.decorLayer = map.createLayer('decoration', tileset);
     };
+
+    createBackground(){
+        const sky = this.add
+            .image(0, 0, 'sky')
+            .setOrigin(0)
+            .setScrollFactor(0)
+            .setDepth(-1); //cielo de fondo
+    };
 }
