@@ -51,6 +51,12 @@ export default class AudioManager {
             config: { volume: 0.4, rate: 1.0 }
         })
 
+        //kick sound
+        this.sounds.set('kick', {
+            key: 'kick-sound',
+            config: { volume: 0.4, rate: 1.0 }
+        })
+
         //bump sound
         this.sounds.set('bump', {
             key: 'bump-sound',
@@ -110,6 +116,7 @@ export default class AudioManager {
     playPowerUp(){ return this.play('powerup') };
     playPowerDown(){ return this.play('powerdown') };
     playStomp(){ return this.play('stomp') };
+    playKick(){ return this.play('kick') };
     playPipe(){ return this.play('pipe') };
     playBump(){ return this.play('bump') };
     playBreak(){ return this.play('break') };

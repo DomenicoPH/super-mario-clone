@@ -160,6 +160,8 @@ export default class Koopa extends StatefulEnemy {
       this.sprite.play('koopa-shell');
       this.sprite.flipX = direction > 0;
 
+      this.scene.audio.playKick();
+
       this.sprite.tempIgnorePlayer = true;
       this.scene.time.delayedCall(200, () => {
         if (this.sprite) this.sprite.tempIgnorePlayer = false;

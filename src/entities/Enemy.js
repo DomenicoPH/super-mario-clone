@@ -56,7 +56,7 @@ export default class Enemy {
         this.sprite.setFlipY(true);
         this.sprite.setVelocity(60 * direction, -200);
         this.sprite.body.allowGravity = true;
-        this.scene.audio.playStomp();
+        this.scene.audio.playKick();
 
         // Desactivar colisiones después de un breve delay para atravesar el suelo
         this.scene.time.delayedCall(100, () => {
@@ -85,7 +85,7 @@ export default class Enemy {
         this.sprite.setFlipY(true);
         this.sprite.setVelocity(60 * direction, -200);
         this.sprite.body.allowGravity = true;
-        this.scene.audio.playStomp();
+        this.scene.audio.playKick();
 
         this.scene.time.delayedCall(1000, () => {
             if (this.sprite && this.sprite.destroy) this.sprite.destroy();

@@ -38,6 +38,7 @@ class PreloadScene extends Phaser.Scene {
         this.load.audio('powerup-sound', '/assets/sound/smb_powerup.wav');
         this.load.audio('powerdown-sound', '/assets/sound/smb_pipe.wav');
         this.load.audio('stomp-sound', '/assets/sound/smb_stomp.wav');
+        this.load.audio('kick-sound', '/assets/sound/smb_kick.wav');
         this.load.audio('pipe-sound', '/assets/sound/smb_pipe.wav');
         this.load.audio('bump-sound', '/assets/sound/smb_bump.wav');
         this.load.audio('break-sound', '/assets/sound/smb_breakblock.wav');
