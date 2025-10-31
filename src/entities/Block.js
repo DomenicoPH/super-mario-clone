@@ -55,14 +55,14 @@ export default class Block {
       const blockLeft = blockBounds.left;
       const blockRight = blockBounds.right;
 
-      // Recorremos cuerpos del mundo
+      // 1. Recorremos objetos normales (power-ups, etc.)
       this.scene.bumpables.getChildren().forEach(obj => {
         if (!obj.body || !obj.getBounds) return;
         if (ignorePlayer && this.scene.player && obj === this.scene.player.sprite) return;
-            
+
         const objBounds = obj.getBounds();
         if (objBounds.right <= blockLeft || objBounds.left >= blockRight) return;
-            
+
         const objBaseY = objBounds.bottom;
         if (Math.abs(objBaseY - blockTop) <= tolerance) {
           if (obj.body.allowGravity && !obj.body.immovable) {
@@ -70,7 +70,29 @@ export default class Block {
           }
         }
       });
+    
+      // 2. NUEVO: Recorremos enemigos
+      if (this.scene.enemies) {
+        this.scene.enemies.getChildren().forEach(enemySprite => {
+          if (!enemySprite.body || !enemySprite.getBounds) return;
 
+          const enemy = enemySprite.enemyRef;
+          if (!enemy || !enemy.alive) return;
+
+          const enemyBounds = enemySprite.getBounds();
+
+          // Verificar si el enemigo está horizontalmente sobre el bloque
+          if (enemyBounds.right <= blockLeft || enemyBounds.left >= blockRight) return;
+
+          // Verificar si el enemigo está justo encima (con tolerancia)
+          const enemyBaseY = enemyBounds.bottom;
+          if (Math.abs(enemyBaseY - blockTop) <= tolerance) {
+            // Matar al enemigo con efecto de salir volando
+            const direction = enemySprite.x < this.sprite.x ? -1 : 1;
+            enemy.dieByBlockBump(direction);
+          }
+        });
+      }
     }
 
     releaseContent(){
@@ -189,6 +211,8 @@ export default class Block {
     breakBlock() {
         if (this.isAnimating || this.used) return;
         this.isAnimating = true;
+
+        this.bumpObjectsAbove({ force: -300, tolerance: 3, ignorePlayer: true });
 
         const pieces = [];
         const blockX = this.sprite.x + this.sprite.width / 2;
