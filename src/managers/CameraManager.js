@@ -5,6 +5,7 @@ export default class CameraManager {
         this.player = player;
         this.camera = scene.cameras.main;
         this.physics = scene.physics;
+        this.maxScrollX = 0;
     };
 
     setupWorldBounds() {
@@ -26,7 +27,7 @@ export default class CameraManager {
             this.mapManager.map.heightInPixels
         );
         this.camera.scrollY = 0;
-        this.camera.startFollow(this.player.sprite, false, 1, 0);
+        //this.camera.startFollow(this.player.sprite, false, 1, 0);
     }
 
     lockY() {
@@ -35,6 +36,15 @@ export default class CameraManager {
 
     update() {
         this.lockY();
+        // Seguir al jugador manualmente
+        const targetX = this.player.sprite.x - this.camera.width / 2;
+        
+        // Solo avanzar, nunca retroceder
+        if (targetX > this.maxScrollX) {
+            this.maxScrollX = targetX;
+        }
+        
+        this.camera.scrollX = this.maxScrollX;
     }
 
 }
