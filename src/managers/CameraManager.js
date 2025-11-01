@@ -27,7 +27,7 @@ export default class CameraManager {
             this.mapManager.map.heightInPixels
         );
         this.camera.scrollY = 0;
-        //this.camera.startFollow(this.player.sprite, false, 1, 0);
+        //this.camera.startFollow(this.player.sprite, false, 1, 0); // * Comentado para que la camara no siga al jugador
     }
 
     lockY() {
