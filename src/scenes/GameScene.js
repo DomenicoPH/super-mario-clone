@@ -5,6 +5,7 @@ import { createGridOverlay } from "../debug/gridOverlay";
 import AudioManager from "../utils/AudioManager";
 import CameraManager from "../managers/CameraManager";
 import UIManager from "../managers/UIManager";
+import ScoreManager from "../managers/ScoreManager";
 import MapManager from "../managers/MapManager";
 import BlockManager from "../managers/BlockManager";
 import EnemyManager from "../managers/EnemyManager";
@@ -20,6 +21,8 @@ class GameScene extends Phaser.Scene {
         this.isGameOver = false;
         createAnimations(this);
 
+        //Score
+        this.scoreManager = new ScoreManager(this);
         //UI
         this.uiManager = new UIManager(this);
         

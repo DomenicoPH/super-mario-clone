@@ -41,6 +41,8 @@ export default class Enemy {
         this.sprite.disableBody(true, false);
         this.scene.audio.playStomp();
 
+        this.scene.scoreManager.enemyDefeated('stomp');
+
         this.sprite.body.setSize(this.sprite.body.width, this.sprite.body.height / 2);
         this.sprite.body.position.y += this.sprite.body.height / 2;
 
@@ -49,50 +51,54 @@ export default class Enemy {
 
     // Muerte por shell
     dieByShell(direction = 1) {
-            if (!this.alive) return;
-            this.alive = false;
-        
-            // Aplicar impulso inmediatamente
-            this.sprite.setFlipY(true);
-            this.sprite.setVelocity(60 * direction, -200);
-            this.sprite.body.allowGravity = true;
-            this.scene.audio.playKick();
-        
-            // Desactivar colisiones después de un breve delay para atravesar el suelo
-            this.scene.time.delayedCall(100, () => {
-                if (this.sprite && this.sprite.body) {
-                    this.sprite.body.checkCollision.none = true;
-                    this.sprite.setCollideWorldBounds(false);
-                }
-            });
-        
-            this.scene.time.delayedCall(1000, () => {
-                if (this.sprite && this.sprite.destroy) this.sprite.destroy();
-            });
-        }
+        if (!this.alive) return;
+        this.alive = false;
     
-        // Muerte por fireball
-        dieByFireball(direction = 1) {
-            if (!this.alive) return;
-            this.alive = false;
-        
-            // Quitar colisiones de inmediato
+        // Aplicar impulso inmediatamente
+        this.sprite.setFlipY(true);
+        this.sprite.setVelocity(60 * direction, -200);
+        this.sprite.body.allowGravity = true;
+        this.scene.audio.playKick();
+
+        this.scene.scoreManager.enemyDefeated('shell');
+    
+        // Desactivar colisiones después de un breve delay para atravesar el suelo
+        this.scene.time.delayedCall(100, () => {
             if (this.sprite && this.sprite.body) {
                 this.sprite.body.checkCollision.none = true;
                 this.sprite.setCollideWorldBounds(false);
             }
-        
-            this.sprite.setFlipY(true);
-            this.sprite.setVelocity(60 * direction, -200);
-            this.sprite.body.allowGravity = true;
-            this.scene.audio.playKick();
-        
-            this.scene.time.delayedCall(1000, () => {
-                if (this.sprite && this.sprite.destroy) this.sprite.destroy();
-            });
+        });
+    
+        this.scene.time.delayedCall(1000, () => {
+            if (this.sprite && this.sprite.destroy) this.sprite.destroy();
+        });
+    }
+    
+    // Muerte por fireball
+    dieByFireball(direction = 1) {
+        if (!this.alive) return;
+        this.alive = false;
+    
+        // Quitar colisiones de inmediato
+        if (this.sprite && this.sprite.body) {
+            this.sprite.body.checkCollision.none = true;
+            this.sprite.setCollideWorldBounds(false);
         }
     
-        dieByBlockBump(direction = 1) {
+        this.sprite.setFlipY(true);
+        this.sprite.setVelocity(60 * direction, -200);
+        this.sprite.body.allowGravity = true;
+        this.scene.audio.playKick();
+
+        this.scene.scoreManager.enemyDefeated('fireaball');
+    
+        this.scene.time.delayedCall(1000, () => {
+            if (this.sprite && this.sprite.destroy) this.sprite.destroy();
+        });
+    }
+    
+    dieByBlockBump(direction = 1) {
         if (!this.alive) return;
         this.alive = false;
         

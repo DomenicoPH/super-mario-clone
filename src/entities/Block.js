@@ -128,10 +128,7 @@ export default class Block {
 
       AnimationHelper.coinPop(this.scene, coin);
 
-      /* update del score, pendiente...
-      this.scene.registry.values.score += 100;
-      this.scene.events.emit('updateScore');
-      */
+      this.scene.scoreManager.addCoin();
     };
 
     spawnMushroom(){
@@ -237,6 +234,8 @@ export default class Block {
 
         //sound:
         this.scene.audio.playBreak();
+
+        this.scene.scoreManager.blockBroken();
       
         // Destruir pedazos después de 1.5 segundos
         this.scene.time.delayedCall(1500, () => {

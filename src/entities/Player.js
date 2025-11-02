@@ -162,16 +162,16 @@ export default class Player {
           this.body.setDragX(0);
         }
 
-         // Bloquear al jugador en el borde izquierdo de la cámara
-    const cameraLeft = this.scene.cameras.main.scrollX;
-    const playerLeft = this.sprite.x - this.sprite.body.halfWidth;
-    
-    if (playerLeft < cameraLeft) {
-        this.sprite.x = cameraLeft + this.sprite.body.halfWidth;
-        if (this.sprite.body.velocity.x < 0) {
-            this.sprite.body.velocity.x = 0;
+        // Bloquear al jugador en el borde izquierdo de la cámara
+        const cameraLeft = this.scene.cameras.main.scrollX;
+        const playerLeft = this.sprite.x - this.sprite.body.halfWidth;
+        
+        if (playerLeft < cameraLeft) {
+            this.sprite.x = cameraLeft + this.sprite.body.halfWidth;
+            if (this.sprite.body.velocity.x < 0) {
+                this.sprite.body.velocity.x = 0;
+            }
         }
-    }
     }
 
     //Anims
