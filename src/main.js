@@ -14,7 +14,7 @@ const config = {
       gravity: {
         y: 1000
       },
-      debug: true,
+      debug: false,
     }
   },
   scene: [ PreloadScene, GameScene ]
