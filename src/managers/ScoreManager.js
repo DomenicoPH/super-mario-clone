@@ -56,7 +56,7 @@ export default class ScoreManager {
     }
 
     // Eventos
-    enemyDefeated(type = 'stopm'){
+    enemyDefeated(type = 'stomp'){
         const points = {
             'stomp': 100,
             'shell': 200,

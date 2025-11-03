@@ -112,6 +112,8 @@ export default class Enemy {
         this.sprite.setVelocity(60 * direction, -300); // Más fuerza vertical que otros métodos
         this.sprite.body.allowGravity = true;
         this.scene.audio.playStomp(); // Usar el mismo sonido que stomp
+
+        this.scene.scoreManager.enemyDefeated('stomp');
     
         this.scene.time.delayedCall(1000, () => {
             if (this.sprite && this.sprite.destroy) this.sprite.destroy();
