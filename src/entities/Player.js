@@ -276,7 +276,6 @@ export default class Player {
             const prevTexture = this.sprite.texture.key;
             const prevFrame = this.sprite.frame.name;
             this.sprite.setTexture('mario-fire-shoot');
-            this.sprite.setOrigin(0.5);
 
         const fireball = new Fireball(this.scene, spawnX, spawnY, dir);
         this.scene.fireballs.add(fireball.sprite);

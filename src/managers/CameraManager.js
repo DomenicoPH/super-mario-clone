@@ -44,7 +44,7 @@ export default class CameraManager {
             this.maxScrollX = targetX;
         }
         
-        this.camera.scrollX = this.maxScrollX;
+        this.camera.scrollX = Math.round(this.maxScrollX);
     }
 
 }

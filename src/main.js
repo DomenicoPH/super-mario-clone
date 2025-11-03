@@ -3,7 +3,7 @@ import PreloadScene from "./scenes/PreloadScene";
 import GameScene from "./scenes/GameScene";
 
 const config = {
-  type: Phaser.CANVAS,
+  type: Phaser.AUTO,
   width: 256,
   height: 240,
   pixelArt: true,
@@ -14,7 +14,7 @@ const config = {
       gravity: {
         y: 1000
       },
-      debug: false,
+      debug: true,
     }
   },
   scene: [ PreloadScene, GameScene ]
